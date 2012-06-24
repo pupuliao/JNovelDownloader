@@ -36,7 +36,7 @@ public class Downloader {
 		}
 	}
 
-	public boolean downloading(Option option, ReadHtml book,JTextArea resulTextArea) throws IOException {//需要重點加速的地方
+	public boolean downloading(Option option, ReadHtml book,JTextArea resultTextArea) throws IOException {//需要重點加速的地方
 		if (urlData.wrongUrl) {
 			return false;
 		} else {
@@ -52,8 +52,9 @@ public class Downloader {
 						+ "-1.html";
 				RandomAccessFile out = new RandomAccessFile(temp, "rw");
 				try {
-					resulTextArea.append("開始下載檔案: " + temp);
-					resulTextArea.setCaretPosition(resulTextArea.getDocument().getLength());
+					resultTextArea.append("開始下載檔案: " + temp);
+					resultTextArea.paintImmediately(resultTextArea.getBounds()); 
+					System.out.print("開始下載檔案: " + temp);
 					byte data;
 					// 複製檔案
 					while (true) {
@@ -62,7 +63,10 @@ public class Downloader {
 					}
 				} catch (EOFException e) {
 				}
-				resulTextArea.append("...檔案下載成功...\r\n");
+				resultTextArea.append("...檔案下載成功...\r\n");
+				resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength());
+				resultTextArea.paintImmediately(resultTextArea.getBounds()); 
+				System.out.println("下載成功");
 				
 				book.addFileName(temp);
 				in.close(); // 關閉串流

@@ -1,6 +1,7 @@
 package JNovelDownloader.Kernel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -60,6 +61,7 @@ public class ReadHtml {
 		for (int n = 0; n < havePage; n++) {
 			this.openFile(fileName[n]);
 			System.out.println(fileName[n]);
+			System.out.println(fileName[n]+"處理中");
 			tempLineBuilder = new StringBuilder();
 			while ((temp = reader.readLine()) != null) {
 				// System.out.println(temp);
@@ -113,6 +115,17 @@ public class ReadHtml {
 
 	public void setBookName(String data) {
 		bookName = data;
+	}
+	
+	public void delTempFile(){
+		System.out.println("刪除暫存檔中..");
+		File temp ;
+		for (int n = 0; n < havePage; n++) {
+			temp = new File(fileName[n]);
+			if(temp.exists()) temp.delete();
+		}
+		
+		System.out.println("刪除完畢");
 	}
 
 }

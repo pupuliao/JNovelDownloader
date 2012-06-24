@@ -49,7 +49,7 @@ public class Frame extends JFrame {
 	private Downloader X;
 	private JButton pathButton;
 	private ReadHtml book;
-	private JTextArea resulTextArea;
+	private JTextArea resultTextArea;
 	private JScrollPane resultScrollPane;
 	private JPanel resultPanel;
 	private JButton settingButton;
@@ -65,7 +65,7 @@ public class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				OptionFrame frame = new OptionFrame(option, resulTextArea);
+				OptionFrame frame = new OptionFrame(option, resultTextArea);
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				frame.setSize(700, 200);
 				frame.setVisible(true);
@@ -114,11 +114,14 @@ public class Frame extends JFrame {
 					
 					try {
 						if (!downloader.downloading(option, readHtml,
-								resulTextArea)) {
-							resulTextArea.append("網址有問題\r\n");
+								resultTextArea)) {
+							resultTextArea.append("網址有問題\r\n");
 						} else {
 							if (readHtml.makeBook(option)) {
-								resulTextArea.append("小說製作完成");
+								resultTextArea.append("小說製作完成\r\n");
+								readHtml.delTempFile();
+								resultTextArea.append("清除暫存檔\r\n");
+								resultTextArea.paintImmediately(resultTextArea.getBounds()); 
 							}
 						}
 					} catch (IOException e) {
@@ -126,16 +129,16 @@ public class Frame extends JFrame {
 						e.printStackTrace();
 					}
 				} else {
-					resulTextArea.append("下載失敗");
+					resultTextArea.append("下載失敗");
 				}
 			}
 		});
 		downloadPanel.add(downloadButton);
 		add(downloadPanel);
 
-		resulTextArea = new JTextArea(8, 50);
-		resulTextArea.setLineWrap(true);
-		resultScrollPane = new JScrollPane(resulTextArea);
+		resultTextArea = new JTextArea(8, 50);
+		resultTextArea.setLineWrap(true);
+		resultScrollPane = new JScrollPane(resultTextArea);
 		resultScrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		resultScrollPane
@@ -144,19 +147,19 @@ public class Frame extends JFrame {
 		resultPanel.add(resultScrollPane);
 		add(resultPanel);
 
-		resulTextArea.append("啟動中...\r\n");
-		option.printOption(resulTextArea);
+		resultTextArea.append("啟動中...\r\n");
+		option.printOption(resultTextArea);
 	}
 
 	private boolean check(String page, String bookName, String author) {
 		if (!page.matches("[1-9][0-9]*")) {
-			resulTextArea.append("page..有誤");
+			resultTextArea.append("page..有誤");
 			return false;
 		} else if (bookName.isEmpty()) {
-			resulTextArea.append("bookName..有誤");
+			resultTextArea.append("bookName..有誤");
 			return false;
 		} else if (author.isEmpty()) {
-			resulTextArea.append("author..有誤");
+			resultTextArea.append("author..有誤");
 			return false;
 		} else
 			return true;

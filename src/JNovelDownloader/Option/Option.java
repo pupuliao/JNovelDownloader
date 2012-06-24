@@ -78,12 +78,12 @@ public class Option {
 		
 	}
 	
-	public void printOption(JTextArea resulTextArea){
-		resulTextArea.append("暫存檔位置：" + tempPath + "\r\n");
-		resulTextArea.append("小說存放位置：" + novelPath + "\r\n");
-		if(encoding) resulTextArea.append("正體中文\r\n");
-		else resulTextArea.append("簡體中文\r\n");
-		resulTextArea.setCaretPosition(resulTextArea.getDocument().getLength());
+	public void printOption(JTextArea resultTextArea){
+		resultTextArea.append("暫存檔位置：" + tempPath + "\r\n");
+		resultTextArea.append("小說存放位置：" + novelPath + "\r\n");
+		if(encoding) resultTextArea.append("正體中文\r\n");
+		else resultTextArea.append("簡體中文\r\n");
+		resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength());
 		
 	}
 	

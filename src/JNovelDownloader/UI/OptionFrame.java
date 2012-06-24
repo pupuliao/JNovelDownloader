@@ -136,11 +136,16 @@ public class OptionFrame extends JFrame {
 					e.printStackTrace();
 				}
 				option.printOption(resulTextArea);
+				closeFrame();
 			}
 		});
 		add(setButton);
 	}
 
+	private void closeFrame(){
+		this.dispose();
+	}
+	
 	private class RadioButtonHandler implements ItemListener { // 當選擇 RADIO
 																// 按鈕時觸發
 		private boolean encode;

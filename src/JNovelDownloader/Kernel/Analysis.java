@@ -15,6 +15,7 @@ public class Analysis {
 			result.wrongUrl = true;
 			return result;
 		}
+		result.page=1; //避免網址列中沒有頁碼
 		result.domain = temp[temp.length - 2];
 		System.out.println(result.domain);
 		String A = temp[temp.length - 1];
