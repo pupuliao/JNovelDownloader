@@ -58,6 +58,7 @@ public class ReadHtml {
 		writer = new OutputStreamWriter(new FileOutputStream(path + bookName
 				+ ".txt"), "UTF-8");
 		writer.write(bookName+"\r\n"+author+"\r\n");
+		Encoding encoding=new Encoding();
 		for (int n = 0; n < havePage; n++) {
 			this.openFile(fileName[n]);
 			System.out.println(fileName[n]);
@@ -72,6 +73,7 @@ public class ReadHtml {
 																			// 如果有
 																			// 會有內容，如果沒有是空字串
 					temp = temp2[2];
+					temp +="\r\n";
 				}
 				if (inContent) {
 					if (temp.indexOf("<div ") >= 0) // 避免碰到下一階層
@@ -82,6 +84,7 @@ public class ReadHtml {
 						else {
 							temp = temp.replace("</div>", " ");
 							inContent = false;
+							temp+="\r\n";
 						}
 					}
 					if (otherTable == 0) {
@@ -94,7 +97,11 @@ public class ReadHtml {
 
 			}
 			tempLineBuilder.append("\r\n");
-			writer.write(tempLineBuilder.toString());
+			if(option.encoding){
+				writer.write(encoding.StoT(tempLineBuilder.toString()));
+			}else{
+				writer.write(encoding.TtoS(tempLineBuilder.toString()));
+			}
 			tempLineBuilder = null;
 			reader.close();
 		}
