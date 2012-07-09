@@ -103,25 +103,31 @@ public class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub //下載指令放置處
+				double startTime,donTime,totTime;
+		    	startTime = System.currentTimeMillis();
 				if (check(pageTextField.getText(), bookNameTextField.getText(),
-						authorTextField.getText())) {
+						authorTextField.getText())) {//確認所有該填的資料都有填寫
 					downloader.setUP(Integer.parseInt(pageTextField.getText()),
-							urlTextField.getText());
+							urlTextField.getText());//分析網址
 					readHtml.setPage(Integer.parseInt(pageTextField.getText()));
 					readHtml.bookName = bookNameTextField.getText();
 					readHtml.author = authorTextField.getText();
 					readHtml.setPath(option.novelPath);
-					
+					resultTextArea.append("開始下載\r\n");
 					try {
 						if (!downloader.downloading(option, readHtml,
-								resultTextArea)) {
-							resultTextArea.append("網址有問題\r\n");
+								resultTextArea)) {//開始下載
+							resultTextArea.append("網址有問題\r\n");//下載失敗
 						} else {
-							if (readHtml.makeBook(option)) {
+							donTime=System.currentTimeMillis()-startTime;
+							if (readHtml.makeBook(option)) {//開始解析所有的網頁
 								resultTextArea.append("小說製作完成\r\n");
 								readHtml.delTempFile();
 								resultTextArea.append("清除暫存檔\r\n");
-								resultTextArea.paintImmediately(resultTextArea.getBounds()); 
+								resultTextArea.paintImmediately(resultTextArea.getBounds());
+								totTime=System.currentTimeMillis()-startTime;
+								resultTextArea.append("總共花費 "+ totTime+ "ms ;其中下載花費"+ donTime+ "ms \r\n");
+								resultTextArea.paintImmediately(resultTextArea.getBounds());
 							}
 						}
 					} catch (IOException e) {
@@ -136,7 +142,7 @@ public class Frame extends JFrame {
 		downloadPanel.add(downloadButton);
 		add(downloadPanel);
 
-		resultTextArea = new JTextArea(8, 50);
+		resultTextArea = new JTextArea(8, 50);//訊息視窗
 		resultTextArea.setLineWrap(true);
 		resultScrollPane = new JScrollPane(resultTextArea);
 		resultScrollPane
@@ -148,7 +154,7 @@ public class Frame extends JFrame {
 		add(resultPanel);
 
 		resultTextArea.append("啟動中...\r\n");
-		option.printOption(resultTextArea);
+		option.printOption(resultTextArea);//印出初始訊息
 	}
 
 	private boolean check(String page, String bookName, String author) {

@@ -21,7 +21,7 @@ public class Downloader {
 	}
 
 	public void setUP(int Page, String urlString) {
-		urlData = Analysis.analysisUrl(urlString);
+		urlData = Analysis.analysisUrl(urlString);// 分析網址
 		this.toPage = Page;
 	}
 
@@ -35,8 +35,9 @@ public class Downloader {
 			urlStrings[m++] = temp + n + "-1.html";
 		}
 	}
-
-	public boolean downloading(Option option, ReadHtml book,JTextArea resultTextArea) throws IOException {//需要重點加速的地方
+    /*****************以下function 是舊有的downloading ***************************/
+	public boolean downloadingOld(Option option, ReadHtml book,
+			JTextArea resultTextArea) throws IOException {// 需要重點加速的地方
 		if (urlData.wrongUrl) {
 			return false;
 		} else {
@@ -52,8 +53,10 @@ public class Downloader {
 						+ "-1.html";
 				RandomAccessFile out = new RandomAccessFile(temp, "rw");
 				try {
-					resultTextArea.append("開始下載檔案: " + temp);
-					resultTextArea.paintImmediately(resultTextArea.getBounds()); 
+					// resultTextArea.append("開始下載檔案: " + temp); // 在UI上顯示結果
+					// resultTextArea.paintImmediately(resultTextArea.getBounds());
+					// resultTextArea.setCaretPosition(resultTextArea.getDocument()
+					// .getLength());
 					System.out.print("開始下載檔案: " + temp);
 					byte data;
 					// 複製檔案
@@ -63,15 +66,67 @@ public class Downloader {
 					}
 				} catch (EOFException e) {
 				}
-				resultTextArea.append("...檔案下載成功...\r\n");
-				resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength());
-				resultTextArea.paintImmediately(resultTextArea.getBounds()); 
+				// resultTextArea.append("...檔案下載成功...\r\n");
+				// resultTextArea.paintImmediately(resultTextArea.getBounds());
+				// resultTextArea.setCaretPosition(resultTextArea.getDocument()
+				// .getLength());
 				System.out.println("下載成功");
-				
-				book.addFileName(temp);
+
+				book.addFileName(temp); // 放入要處理檔案的清單中
 				in.close(); // 關閉串流
 				out.close();
 			}
+			return true;
+		}
+	}
+
+	public boolean downloading(Option option, ReadHtml book,
+			JTextArea resultTextArea) throws IOException {// 需要重點加速的地方
+		if (urlData.wrongUrl) {
+			return false;
+		} else {
+			generateUrlList();
+			// http://ck101.com/thread-1753100-55-1.html
+			int m = 0;
+			int threatNumber = 4;
+			int moreThreat = urlStrings.length % threatNumber;
+			int tempNumber = urlStrings.length / threatNumber;
+			DownloadThread []downloadThread =new DownloadThread[threatNumber]; 
+			String temp;
+			String[] from ;
+			String[] to ;
+			String[] totalTo = new String[urlStrings.length];
+			int number;
+			for (int n = urlData.page; n <= toPage; n++) {
+				// from[m]=urlStrings[m];
+				totalTo[m] = option.tempPath + "thread-" + urlData.Tid + "-" + n
+						+ "-1.html";
+				;
+				book.addFileName(totalTo[m]);
+				m++;
+			}
+			m=0;
+			for (int x = 0; x < threatNumber; x++) {
+				if (moreThreat > 0) {
+					number = tempNumber + 1;
+					moreThreat--;
+				} else {
+					number = tempNumber;
+				}
+				from= new String [number];
+				to=new String [number];
+				for(int y=0;y<number;y++){
+					from[y]=urlStrings[m];
+					to[y]=totalTo[m++];
+				}
+				downloadThread[x] =new DownloadThread(from, to);
+				downloadThread[x].start();
+			}
+			try {
+				for(int x=0 ; x<threatNumber;x++){
+					downloadThread[x].join(); 
+				}
+	        } catch (InterruptedException e) {}
 			return true;
 		}
 	}

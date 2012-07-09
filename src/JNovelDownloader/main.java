@@ -24,6 +24,7 @@ public class main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,350);
 		frame.setVisible(true);
+		
 			
 //		String test1 ="ttp://ck101.com/thread-1753100-1-1.html";
 //		String[] test2=test1.split("/");

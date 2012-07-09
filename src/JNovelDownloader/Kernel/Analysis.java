@@ -12,6 +12,7 @@ public class Analysis {
 		result.urlString = data;
 		String temp[] = data.split("/");
 		if (temp.length > 4) {
+			System.out.println("..");
 			result.wrongUrl = true;
 			return result;
 		}
