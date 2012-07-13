@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import javax.swing.ButtonGroup;
@@ -24,13 +22,20 @@ import JNovelDownloader.Option.Option;
 
 public class OptionFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField novelPathTextField;
 	private JTextField tempPathTextField;
+	private JTextField threadNumberTextField;
 	private JPanel novelPathPanel;
 	private JButton novalPathButton;
 	private JLabel encodingLabel;
+	private JLabel threadNumberLabel;
 	private JPanel encodingPanel;
 	private JPanel tempPathPanel;
+	private JPanel threadNuimberPanel;
 	private JButton tempPathButton;
 	private ButtonGroup encoding;
 	private JRadioButton encodingTRadioButton;
@@ -91,15 +96,18 @@ public class OptionFrame extends JFrame {
 		tempPathPanel.add(tempPathTextField);
 		add(tempPathPanel);
 
-		encodingLabel = new JLabel("自動轉碼選擇(尚未開放)");
-		if (option.encoding) {
+		encodingLabel = new JLabel("自動轉碼選擇");
+/*		if (option.encoding) {
 			encodingTRadioButton = new JRadioButton("正體中文", true);
 			encodingSRadioButton = new JRadioButton("簡體中文", false);
+			
 		} else {
 			encodingTRadioButton = new JRadioButton("正體中文", false);
 			encodingSRadioButton = new JRadioButton("簡體中文", true);
-		}
-
+		}*/
+		encodingTRadioButton = new JRadioButton("正體中文", option.encoding);
+		encodingSRadioButton = new JRadioButton("簡體中文", !option.encoding);
+		tempEncoding=option.encoding;
 		encoding = new ButtonGroup();
 		encoding.add(encodingTRadioButton);
 		encoding.add(encodingSRadioButton);
@@ -110,7 +118,13 @@ public class OptionFrame extends JFrame {
 		encodingTRadioButton.addItemListener(new RadioButtonHandler(true));
 		encodingSRadioButton.addItemListener(new RadioButtonHandler(false));
 		add(encodingPanel);
-
+		threadNumberLabel =new JLabel("多執行序數目：");
+		threadNumberTextField  =new JTextField(String.valueOf(option.threadNumber), 5);
+		threadNuimberPanel =new JPanel();
+		threadNuimberPanel.add(threadNumberLabel);
+		threadNuimberPanel.add(threadNumberTextField);
+		add(threadNuimberPanel);
+		
 		if (option.replace) {
 			replaCheckBox = new JCheckBox("文字取代(尚未開放)", true);
 		} else {
@@ -128,6 +142,7 @@ public class OptionFrame extends JFrame {
 				option.tempPath = tempPathTextField.getText();
 				option.encoding = tempEncoding;
 				option.replace = replaCheckBox.isSelected();
+				option.threadNumber=Integer.parseInt(threadNumberTextField.getText());
 
 				try {
 					option.saveOption();

@@ -1,38 +1,29 @@
 package JNovelDownloader.UI;
 
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-
-import javax.management.loading.PrivateClassLoader;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
-
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import com.sun.org.apache.regexp.internal.recompile;
 
 public class Frame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField urlTextField;
 	private JTextField authorTextField;
 	private JTextField bookNameTextField;
@@ -44,11 +35,7 @@ public class Frame extends JFrame {
 	private JLabel pageLabel;
 	private JPanel urlPanel;
 	private JPanel downloadPanel;
-	private JPanel pathPanel;
 	private JPanel bookNamePanel;
-	private Downloader X;
-	private JButton pathButton;
-	private ReadHtml book;
 	private JTextArea resultTextArea;
 	private JScrollPane resultScrollPane;
 	private JPanel resultPanel;
@@ -109,10 +96,11 @@ public class Frame extends JFrame {
 						authorTextField.getText())) {//確認所有該填的資料都有填寫
 					downloader.setUP(Integer.parseInt(pageTextField.getText()),
 							urlTextField.getText());//分析網址
-					readHtml.setPage(Integer.parseInt(pageTextField.getText()));
-					readHtml.bookName = bookNameTextField.getText();
-					readHtml.author = authorTextField.getText();
-					readHtml.setPath(option.novelPath);
+//					readHtml.setPage(Integer.parseInt(pageTextField.getText()));
+//					readHtml.bookName = bookNameTextField.getText();
+//					readHtml.author = authorTextField.getText();
+//					readHtml.setPath(option.novelPath);
+					readHtml.setUp(option.threadNumber, bookNameTextField.getText(), authorTextField.getText());
 					resultTextArea.append("開始下載\r\n");
 					try {
 						if (!downloader.downloading(option, readHtml,

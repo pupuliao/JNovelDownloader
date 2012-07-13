@@ -1,11 +1,6 @@
 package JNovelDownloader.Kernel;
 
-import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.swing.JTextArea;
 
@@ -36,49 +31,49 @@ public class Downloader {
 		}
 	}
     /*****************以下function 是舊有的downloading ***************************/
-	public boolean downloadingOld(Option option, ReadHtml book,
-			JTextArea resultTextArea) throws IOException {// 需要重點加速的地方
-		if (urlData.wrongUrl) {
-			return false;
-		} else {
-			generateUrlList();
-			// http://ck101.com/thread-1753100-55-1.html
-			int m = 0;
-			String temp;
-			for (int n = urlData.page; n <= toPage; n++) {
-				URL url = new URL(urlStrings[m++]); // 建立URL物件
-
-				DataInputStream in = new DataInputStream(url.openStream());
-				temp = option.tempPath + "thread-" + urlData.Tid + "-" + n
-						+ "-1.html";
-				RandomAccessFile out = new RandomAccessFile(temp, "rw");
-				try {
-					// resultTextArea.append("開始下載檔案: " + temp); // 在UI上顯示結果
-					// resultTextArea.paintImmediately(resultTextArea.getBounds());
-					// resultTextArea.setCaretPosition(resultTextArea.getDocument()
-					// .getLength());
-					System.out.print("開始下載檔案: " + temp);
-					byte data;
-					// 複製檔案
-					while (true) {
-						data = (byte) in.readByte();
-						out.writeByte(data);
-					}
-				} catch (EOFException e) {
-				}
-				// resultTextArea.append("...檔案下載成功...\r\n");
-				// resultTextArea.paintImmediately(resultTextArea.getBounds());
-				// resultTextArea.setCaretPosition(resultTextArea.getDocument()
-				// .getLength());
-				System.out.println("下載成功");
-
-				book.addFileName(temp); // 放入要處理檔案的清單中
-				in.close(); // 關閉串流
-				out.close();
-			}
-			return true;
-		}
-	}
+//	public boolean downloadingOld(Option option, ReadHtml book,
+//			JTextArea resultTextArea) throws IOException {// 需要重點加速的地方
+//		if (urlData.wrongUrl) {
+//			return false;
+//		} else {
+//			generateUrlList();
+//			// http://ck101.com/thread-1753100-55-1.html
+//			int m = 0;
+//			String temp;
+//			for (int n = urlData.page; n <= toPage; n++) {
+//				URL url = new URL(urlStrings[m++]); // 建立URL物件
+//
+//				DataInputStream in = new DataInputStream(url.openStream());
+//				temp = option.tempPath + "thread-" + urlData.Tid + "-" + n
+//						+ "-1.html";
+//				RandomAccessFile out = new RandomAccessFile(temp, "rw");
+//				try {
+//					// resultTextArea.append("開始下載檔案: " + temp); // 在UI上顯示結果
+//					// resultTextArea.paintImmediately(resultTextArea.getBounds());
+//					// resultTextArea.setCaretPosition(resultTextArea.getDocument()
+//					// .getLength());
+//					System.out.print("開始下載檔案: " + temp);
+//					byte data;
+//					// 複製檔案
+//					while (true) {
+//						data = (byte) in.readByte();
+//						out.writeByte(data);
+//					}
+//				} catch (EOFException e) {
+//				}
+//				// resultTextArea.append("...檔案下載成功...\r\n");
+//				// resultTextArea.paintImmediately(resultTextArea.getBounds());
+//				// resultTextArea.setCaretPosition(resultTextArea.getDocument()
+//				// .getLength());
+//				System.out.println("下載成功");
+//
+//				book.addFileName(temp); // 放入要處理檔案的清單中
+//				in.close(); // 關閉串流
+//				out.close();
+//			}
+//			return true;
+//		}
+//	}
 
 	public boolean downloading(Option option, ReadHtml book,
 			JTextArea resultTextArea) throws IOException {// 需要重點加速的地方
@@ -88,11 +83,10 @@ public class Downloader {
 			generateUrlList();
 			// http://ck101.com/thread-1753100-55-1.html
 			int m = 0;
-			int threatNumber = 4;
-			int moreThreat = urlStrings.length % threatNumber;
-			int tempNumber = urlStrings.length / threatNumber;
-			DownloadThread []downloadThread =new DownloadThread[threatNumber]; 
-			String temp;
+			//int threadNumber = 4;
+			int morethread = urlStrings.length % option.threadNumber;
+			int tempNumber = urlStrings.length / option.threadNumber;
+			DownloadThread []downloadThread =new DownloadThread[option.threadNumber]; 
 			String[] from ;
 			String[] to ;
 			String[] totalTo = new String[urlStrings.length];
@@ -102,14 +96,14 @@ public class Downloader {
 				totalTo[m] = option.tempPath + "thread-" + urlData.Tid + "-" + n
 						+ "-1.html";
 				;
-				book.addFileName(totalTo[m]);
+//				book.addFileName(totalTo[m]);
 				m++;
 			}
 			m=0;
-			for (int x = 0; x < threatNumber; x++) {
-				if (moreThreat > 0) {
+			for (int x = 0; x < option.threadNumber; x++) {
+				if (morethread > 0) {
 					number = tempNumber + 1;
-					moreThreat--;
+					morethread--;
 				} else {
 					number = tempNumber;
 				}
@@ -120,10 +114,11 @@ public class Downloader {
 					to[y]=totalTo[m++];
 				}
 				downloadThread[x] =new DownloadThread(from, to);
+				book.addFileName(to);
 				downloadThread[x].start();
 			}
 			try {
-				for(int x=0 ; x<threatNumber;x++){
+				for(int x=0 ; x<option.threadNumber;x++){
 					downloadThread[x].join(); 
 				}
 	        } catch (InterruptedException e) {}
