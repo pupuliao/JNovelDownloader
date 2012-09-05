@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MakeBookThread extends Thread {
 	private String[] html;
@@ -24,6 +26,11 @@ public class MakeBookThread extends Thread {
 		boolean inContent = false;
 		String temp ;
 		int otherTable=0;
+		/*用於正規表示式的過濾，比replace all 快速準確*/
+		Pattern p_html;
+        Matcher m_html; 			
+        String regEx_html = "<[^>]+>";
+        
 		for (int n = 0; n < html.length; n++) {
 			try {
 				reader = new BufferedReader(new InputStreamReader(
@@ -41,10 +48,10 @@ public class MakeBookThread extends Thread {
 					// System.out.println(temp);
 					if (temp.indexOf("class=\"postmessage\">") >= 0) {// 找出 文章內容
 						inContent = true;
-						String[] temp2 = temp.split("class=\"postmessage\">|<");// 接取標題
+						String[] temp2 = temp.split("class=\"postmessage\">");// 接取標題
 																				// 如果有
 																				// 會有內容，如果沒有是空字串
-						temp = temp2[2];
+						temp = temp2[1];
 						temp += "\r\n";
 					}
 					if (inContent) {
@@ -61,7 +68,11 @@ public class MakeBookThread extends Thread {
 						}
 						if (otherTable == 0) {
 							temp = temp.replace("<br />", "\r\n");// 取代換行符號
-							temp = temp.replace("&nbsp;", "");// 取代特殊字元
+							temp = temp.replace("&nbsp;", "");// 取代特殊字元 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
+							//temp = temp.replace("<[^>]+>", "");
+							p_html = Pattern.compile(regEx_html,Pattern.CASE_INSENSITIVE);
+					        m_html = p_html.matcher(temp);
+					        temp = m_html.replaceAll("");
 							bookData.append(temp);
 						}
 
