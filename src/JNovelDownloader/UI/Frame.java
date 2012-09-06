@@ -114,7 +114,8 @@ public class Frame extends JFrame {
 								resultTextArea.append("清除暫存檔\r\n");
 								resultTextArea.paintImmediately(resultTextArea.getBounds());
 								totTime=System.currentTimeMillis()-startTime;
-								resultTextArea.append("總共花費 "+ totTime+ "ms ;其中下載花費"+ donTime+ "ms \r\n");
+								
+								resultTextArea.append("總共花費 "+ totTime+ "ms ;其中下載花費"+ donTime+ "ms 資料處理花費  "+(totTime-donTime)+"ms \r\n");
 								resultTextArea.paintImmediately(resultTextArea.getBounds());
 							}
 						}

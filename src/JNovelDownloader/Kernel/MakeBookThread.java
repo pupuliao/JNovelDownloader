@@ -27,9 +27,9 @@ public class MakeBookThread extends Thread {
 		String temp ;
 		int otherTable=0;
 		/*用於正規表示式的過濾，比replace all 快速準確*/
-		Pattern p_html;
+		Pattern p_html= Pattern.compile("<[^>]+>",Pattern.CASE_INSENSITIVE);
         Matcher m_html; 			
-        String regEx_html = "<[^>]+>";
+//        String regEx_html = "<[^>]+>";
         
 		for (int n = 0; n < html.length; n++) {
 			try {
@@ -67,10 +67,11 @@ public class MakeBookThread extends Thread {
 							}
 						}
 						if (otherTable == 0) {
-							temp = temp.replace("<br />", "\r\n");// 取代換行符號
-							temp = temp.replace("&nbsp;", "");// 取代特殊字元 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
+							//temp = temp.replace("<br />", "\r\n");// 取代換行符號
+							//temp = temp.replace("&nbsp;", "");// 取代特殊字元 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
+							temp=Replace.replace(temp, "<br />", "\r\n");
+							temp = Replace.replace(temp,"&nbsp;", "");
 							//temp = temp.replace("<[^>]+>", "");
-							p_html = Pattern.compile(regEx_html,Pattern.CASE_INSENSITIVE);
 					        m_html = p_html.matcher(temp);
 					        temp = m_html.replaceAll("");
 							bookData.append(temp);

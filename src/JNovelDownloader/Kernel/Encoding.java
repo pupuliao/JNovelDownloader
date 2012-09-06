@@ -7,6 +7,7 @@ public class Encoding {
 	
 	private String[] T= new String [UTF8T.length()];
 	private String[] S= new String [UTF8S.length()];
+	
 	public Encoding(){
 		for (int n=0;n<UTF8T.length();n++){
 			T[n]=String.valueOf(UTF8T.charAt(n));
@@ -18,7 +19,8 @@ public class Encoding {
 		int n;
 		String temp=data;
 		for (n=0;n<UTF8T.length();n++){
-			temp=temp.replaceAll(S[n],T[n]);
+			//temp=temp.replaceAll(S[n],T[n]);
+			temp=Replace.replace(temp, S[n],T[n]);
 		}
 		return temp;
 	}
@@ -26,7 +28,8 @@ public class Encoding {
 		int n;
 		String temp=data;
 		for (n=0;n<UTF8T.length();n++){
-			temp=temp.replaceAll(T[n],S[n]);
+			//temp=temp.replaceAll(T[n],S[n]);
+			temp=Replace.replace(temp, T[n],S[n]);
 		}
 		return temp;
 	}
