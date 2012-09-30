@@ -27,19 +27,22 @@ public class main {
 		frame.setSize(800,350);
 		frame.setVisible(true);
 		
-		String test1 ="<div id=\"postmessage_81898396\" class=\"postmessage\"><font color=\"DarkOrchid\">第九百五十四節大結局<br />";
+//		int[][] d=new int[5][2];
+//		System.out.println(d.length);
+		
+//		String test1 ="<div id=\"postmessage_81898396\" class=\"postmessage\"><font color=\"DarkOrchid\">第九百五十四節大結局<br />";
 //		String[] temp2 = test1.split("class=\"postmessage\">");// 接取標題
 //		// 如果有
 //		// 會有內容，如果沒有是空字串
 //		for(int n=0;n<temp2.length;n++){
 //			System.out.println(n+"-"+temp2[n]+"\r\n");
 //		}
-		String test2 = test1.replaceAll("<[^>]+>", "");
+//		String test2 = test1.replaceAll("<[^>]+>", "");
 		//test1 = test1.replace("<[^>]+>", "");
-		test1=Replace.replace(test1, "<[^>]+>", "");
+//		test1=Replace.replace(test1, "<[^>]+>", "");
 //		String[] test2=test1.split("/");
-		System.out.println(test1);
-		System.out.println(test2);
+//		System.out.println(test1);
+//		System.out.println(test2);
 //		for(int n=0;n<test2.length;n++){
 //			System.out.println(n+":"+test2[n]);
 //		}
