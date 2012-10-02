@@ -1,0 +1,12 @@
+依照卡提諾論壇做樣板分析 此為手機板
+<div class="postBox">
+	<div class="pbody">
+		<h2><strong>標題</strong</h2> //可能會出現，標題可能在這
+		<div class="mes">
+			<div id="postmessage_~~~~" class="postmessage"><i class="pstatus"> 本帖最後由 b1234567 於 2012-6-23 07:59 編輯 </i>  //這可能出現
+			內文	
+			</div>
+		<div>
+	<div>
+	<!--// postslist end-->
+</div>
