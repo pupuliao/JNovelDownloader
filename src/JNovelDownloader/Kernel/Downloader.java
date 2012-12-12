@@ -84,13 +84,14 @@ public class Downloader {
 			// http://ck101.com/thread-1753100-55-1.html
 			int m = 0;
 			//int threadNumber = 4;
-			int morethread = urlStrings.length % option.threadNumber;
-			int tempNumber = urlStrings.length / option.threadNumber;
+			int morethread = urlStrings.length % option.threadNumber; //有多少執行續會多一個檔案
+			int tempNumber = urlStrings.length / option.threadNumber; //每個執行續最少多少個檔案
 			DownloadThread []downloadThread =new DownloadThread[option.threadNumber]; 
 			String[] from ;
 			String[] to ;
 			String[] totalTo = new String[urlStrings.length];
 			int number;
+			/***************建立下載清單******************************/
 			for (int n = urlData.page; n <= toPage; n++) {
 				// from[m]=urlStrings[m];
 				totalTo[m] = option.tempPath + "thread-" + urlData.Tid + "-" + n
@@ -100,6 +101,7 @@ public class Downloader {
 				m++;
 			}
 			m=0;
+			/***************分派任務******************************/
 			for (int x = 0; x < option.threadNumber; x++) {
 				if (morethread > 0) {
 					number = tempNumber + 1;
@@ -113,15 +115,19 @@ public class Downloader {
 					from[y]=urlStrings[m];
 					to[y]=totalTo[m++];
 				}
-				downloadThread[x] =new DownloadThread(from, to);
-				book.addFileName(to);
-				downloadThread[x].start();
+				downloadThread[x] =new DownloadThread(from, to); //放入任務
+				book.addFileName(to);//
+				downloadThread[x].start();//執行任務
 			}
 			try {
+				/***************確保任務執行完再繼續*****************************/
 				for(int x=0 ; x<option.threadNumber;x++){
 					downloadThread[x].join(); 
 				}
 	        } catch (InterruptedException e) {}
+			for(int x=0 ; x<option.threadNumber;x++){
+				if(!downloadThread[x].downloadstate) return false;
+			}
 			return true;
 		}
 	}

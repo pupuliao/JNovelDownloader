@@ -1,6 +1,7 @@
 package JNovelDownloader;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
@@ -27,8 +28,8 @@ public class main {
 		frame.setSize(800,350);
 		frame.setVisible(true);
 		
+
 //		int[][] d=new int[5][2];
-//		System.out.println(d.length);
 		
 //		String test1 ="<div id=\"postmessage_81898396\" class=\"postmessage\"><font color=\"DarkOrchid\">第九百五十四節大結局<br />";
 //		String[] temp2 = test1.split("class=\"postmessage\">");// 接取標題

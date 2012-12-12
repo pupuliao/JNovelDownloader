@@ -75,7 +75,7 @@ public class MakeBookThread extends Thread {
 								temp=temp.replaceAll("<i class=\"pstatus\">[^<>]+ </i>","");
 							}
 							temp += "\r\n";
-							temp = Replace.replace(temp, "<br />", "\r\n");
+							temp = Replace.replace(temp, "<br/>", "\r\n");
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
@@ -98,7 +98,7 @@ public class MakeBookThread extends Thread {
 						}
 						if (otherTable == 0) {
 							// 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
-							temp = Replace.replace(temp, "<br />", "\r\n");
+							temp = Replace.replace(temp, "<br/>", "\r\n");
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");

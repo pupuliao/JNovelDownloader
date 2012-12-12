@@ -90,26 +90,26 @@ public class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub //下載指令放置處
+				/*************下載指令*********/
 				double startTime,donTime,totTime;
 		    	startTime = System.currentTimeMillis();
 				if (check(pageTextField.getText(), bookNameTextField.getText(),
 						authorTextField.getText())) {//確認所有該填的資料都有填寫
 					downloader.setUP(Integer.parseInt(pageTextField.getText()),
 							urlTextField.getText());//分析網址
-//					readHtml.setPage(Integer.parseInt(pageTextField.getText()));
-//					readHtml.bookName = bookNameTextField.getText();
-//					readHtml.author = authorTextField.getText();
-//					readHtml.setPath(option.novelPath);
 					readHtml.setUp(option.threadNumber, bookNameTextField.getText(), authorTextField.getText());
 					resultTextArea.append("開始下載\r\n");
+					resultTextArea.paintImmediately(resultTextArea.getBounds());
 					try {
 						if (!downloader.downloading(option, readHtml,
 								resultTextArea)) {//開始下載
-							resultTextArea.append("網址有問題\r\n");//下載失敗
+							resultTextArea.append("下載失敗\r\n");//下載失敗
+							resultTextArea.paintImmediately(resultTextArea.getBounds());
 						} else {
 							donTime=System.currentTimeMillis()-startTime;
 							if (readHtml.makeBook(option)) {//開始解析所有的網頁
 								resultTextArea.append("小說製作完成\r\n");
+								resultTextArea.paintImmediately(resultTextArea.getBounds());
 								readHtml.delTempFile();
 								resultTextArea.append("清除暫存檔\r\n");
 								resultTextArea.paintImmediately(resultTextArea.getBounds());
