@@ -134,6 +134,7 @@ public class ReadHtml {
 			}
         } catch (InterruptedException e) {}
         for (int n=0;n<option.threadNumber;n++){
+        	System.out.println("小說製作完成");
 			writer.write(makeBookThreads[n].getResult());
 		}
         writer.flush();

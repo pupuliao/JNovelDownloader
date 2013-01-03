@@ -69,13 +69,15 @@ public class MakeBookThread extends Thread {
 					case 2:
 						if (temp.indexOf("class=\"postmessage\">") >= 0){// 找出 文章內容
 							stage=3;
-							String[] temp2 = temp.split("class=\"postmessage\">");// 接取標題
-							temp = temp2[1];
+	//						String[] temp2 = temp.split("class=\"postmessage\">");// 接取標題
+					//		if(temp2.length<=0) 
+	//						temp = temp2[1];
 							if(temp.indexOf("<i class=\"pstatus\">")>=0){
 								temp=temp.replaceAll("<i class=\"pstatus\">[^<>]+ </i>","");
 							}
 							temp += "\r\n";
 							temp = Replace.replace(temp, "<br/>", "\r\n");
+							temp = Replace.replace(temp, "<br />", "\r\n");
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
@@ -99,6 +101,7 @@ public class MakeBookThread extends Thread {
 						if (otherTable == 0) {
 							// 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
 							temp = Replace.replace(temp, "<br/>", "\r\n");
+							temp = Replace.replace(temp, "<br />", "\r\n");
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
