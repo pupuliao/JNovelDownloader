@@ -20,6 +20,14 @@ public class DownloadThread extends Thread {
 		this.to = to;
 		downloadstate = true;
 	}
+	
+	public DownloadThread(String from, String to) {
+		this.from= new String[1];
+		this.to= new String[1];
+		this.from[0] = from;
+		this.to[0] = to;
+		downloadstate = true;
+	}
 
 	public void run() {
 		for (int n = 0; n < this.to.length; n++) {

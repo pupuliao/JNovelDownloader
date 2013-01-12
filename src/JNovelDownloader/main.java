@@ -16,9 +16,9 @@ import JNovelDownloader.UI.Frame;
 public class main {
 	/**
 	 * @param args
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		Option option=new Option();
 		Downloader downloader=new Downloader();

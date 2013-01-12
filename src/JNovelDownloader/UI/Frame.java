@@ -4,14 +4,25 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import com.sun.xml.internal.ws.message.StringHeader;
+
+import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
 import JNovelDownloader.Option.About;
@@ -40,9 +51,10 @@ public class Frame extends JFrame {
 	private JScrollPane resultScrollPane;
 	private JPanel resultPanel;
 	private JButton settingButton;
+	private double theNewVersion;
 
 	public Frame(final Downloader downloader, final ReadHtml readHtml,
-			final Option option) {
+			final Option option) throws Exception {
 		super(About.tittle + "-" + About.version + "  by " + About.author);
 		setLayout(new FlowLayout()); // set frame layout
 		/********************** 設定 ***************************/
@@ -141,9 +153,19 @@ public class Frame extends JFrame {
 		resultPanel = new JPanel();
 		resultPanel.add(resultScrollPane);
 		add(resultPanel);
-
+		theNewVersion=checkVersion(option);
 		resultTextArea.append("啟動中...\r\n");
+		if(theNewVersion>About.versionNumber)
+		{
+			resultTextArea.append("本軟體最新版本為"+String.valueOf(theNewVersion)+"請至http://code.google.com/p/jnoveldownload/downloads/list 下載最新版本\r\n");
+		}else{
+			resultTextArea.append("目前最新版本："+String.valueOf(theNewVersion)+"\r\n");
+		}
+		
 		option.printOption(resultTextArea);//印出初始訊息
+		if(theNewVersion>About.versionNumber){
+			JOptionPane.showMessageDialog(null, "本軟體最新版本為"+String.valueOf(theNewVersion)+"請至官網 下載最新版本", "有更新版本喔!!", JOptionPane.WARNING_MESSAGE );
+		}
 	}
 
 	private boolean check(String page, String bookName, String author) {
@@ -158,6 +180,33 @@ public class Frame extends JFrame {
 			return false;
 		} else
 			return true;
+	}
+	
+	private double checkVersion(Option option) throws Exception
+	{
+		String targetURL="http://code.google.com/p/jnoveldownload/downloads/list";
+		String to=option.tempPath+"version.html";
+		double version=0;
+		DownloadThread downloadThread=new DownloadThread(targetURL, to);
+		try {
+			downloadThread.start();
+			downloadThread.join();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(to), "UTF-8"));
+		// <a href="detail?name=JNovelDownloader_v2_1.jar&amp;can=2&amp;q=">
+		String temp;
+		while ((temp = reader.readLine()) != null) {
+			if(temp.indexOf("detail?name=JNovelDownloader")>=0){
+				String temp2[]=temp.split("_");
+				version=Double.parseDouble(temp2[1].charAt(1)+"."+temp2[2].charAt(0));
+				break;
+			}
+		}
+		
+		return version;
 	}
 
 }
