@@ -107,6 +107,24 @@ public class Option {
 		
 	}
 	
+	public boolean checkPath(){
+		boolean result =true;
+		File file =new File(this.tempPath);
+		if(!file.exists()){
+			File temp1 =new File("");
+			this.tempPath=temp1.getAbsolutePath()+"\\temp\\";
+			result =false;
+		}
+		file =new File(this.novelPath);
+		if(!file.exists()){
+		//	File temp1 =new File("");
+		//	this.tempPath=temp1.getAbsolutePath()+"\\temp\\";
+			result =false;
+		}
+
+		return result;
+	}
+	
 	//private void creatOption
 
 }

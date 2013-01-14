@@ -1,15 +1,10 @@
 package JNovelDownloader;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
-import JNovelDownloader.Kernel.Replace;
-import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
 import JNovelDownloader.UI.Frame;
 
@@ -27,6 +22,10 @@ public class main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,350);
 		frame.setVisible(true);
+		frame.popVersionAlert(option);
+		if(!option.checkPath()){
+			frame.popPathAlert();
+		}
 		
 
 //		int[][] d=new int[5][2];

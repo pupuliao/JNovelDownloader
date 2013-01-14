@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import com.sun.xml.internal.ws.message.StringHeader;
 
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
@@ -153,21 +150,32 @@ public class Frame extends JFrame {
 		resultPanel = new JPanel();
 		resultPanel.add(resultScrollPane);
 		add(resultPanel);
-		theNewVersion=checkVersion(option);
+		
 		resultTextArea.append("啟動中...\r\n");
+		
+		
+		option.printOption(resultTextArea);//印出初始訊息
+		
+	}
+	
+	public void popVersionAlert(Option option)
+	{
+		try {
+			theNewVersion=checkVersion(option);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(theNewVersion>About.versionNumber)
 		{
 			resultTextArea.append("本軟體最新版本為"+String.valueOf(theNewVersion)+"請至http://code.google.com/p/jnoveldownload/downloads/list 下載最新版本\r\n");
 		}else{
 			resultTextArea.append("目前最新版本："+String.valueOf(theNewVersion)+"\r\n");
 		}
-		
-		option.printOption(resultTextArea);//印出初始訊息
 		if(theNewVersion>About.versionNumber){
 			JOptionPane.showMessageDialog(null, "本軟體最新版本為"+String.valueOf(theNewVersion)+"請至官網 下載最新版本", "有更新版本喔!!", JOptionPane.WARNING_MESSAGE );
 		}
 	}
-
 	private boolean check(String page, String bookName, String author) {
 		if (!page.matches("[1-9][0-9]*")) {
 			resultTextArea.append("page..有誤");
@@ -205,8 +213,13 @@ public class Frame extends JFrame {
 				break;
 			}
 		}
+		reader.close();
 		
 		return version;
+	}
+	
+	public void popPathAlert(){
+		JOptionPane.showMessageDialog(null, "您的小說下載路徑或是暫存路徑有問題，請選擇[設定]重新設定", "路徑有問題", JOptionPane.WARNING_MESSAGE );
 	}
 
 }
