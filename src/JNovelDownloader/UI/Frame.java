@@ -195,7 +195,7 @@ public class Frame extends JFrame {
 		String targetURL="http://code.google.com/p/jnoveldownload/downloads/list";
 		String to=option.tempPath+"version.html";
 		double version=0;
-		DownloadThread downloadThread=new DownloadThread(targetURL, to);
+		DownloadThread downloadThread=new DownloadThread(targetURL, to,0);
 		try {
 			downloadThread.start();
 			downloadThread.join();

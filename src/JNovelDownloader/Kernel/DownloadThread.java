@@ -14,18 +14,21 @@ public class DownloadThread extends Thread {
 	private String[] from;
 	private String[] to;
 	public boolean downloadstate;
+	private int threatNember;
 
-	public DownloadThread(String[] from, String[] to) {
+	public DownloadThread(String[] from, String[] to,int t) {
 		this.from = from;
 		this.to = to;
+		this.threatNember = t;
 		downloadstate = true;
 	}
 	
-	public DownloadThread(String from, String to) {
+	public DownloadThread(String from, String to,int t) {
 		this.from= new String[1];
 		this.to= new String[1];
 		this.from[0] = from;
 		this.to[0] = to;
+		this.threatNember = t;
 		downloadstate = true;
 	}
 
@@ -37,8 +40,26 @@ public class DownloadThread extends Thread {
 	        	System.out.print("開始下載檔案: " + from[n]);
 	            URL url = new URL(from[n]);
 	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//	            connection.setDoOutput(true);
-	            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.0.3; zh-tw; HTC_Sensation_Z710e Build/IML74K)" );
+//	            connection.setDoOutput(true);//
+	            switch (threatNember) {
+				case 0:
+					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.0.3; zh-tw; HTC_Sensation_Z710e Build/IML74K)AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30" );
+					break;
+				case 1:
+					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; SAMSUNG; OMNIA7)　" );
+					break;
+				case 2:
+					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A5313e Safari/7534.48.3" );
+					break;
+				case 3:
+					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19" );
+					break;
+				default:
+					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19" );
+					break;
+				}
+	            
+	            
 	            connection.connect();
 	            InputStream inStream = (InputStream) connection.getInputStream();
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"utf8"));

@@ -115,7 +115,7 @@ public class Downloader {
 					from[y]=urlStrings[m];
 					to[y]=totalTo[m++];
 				}
-				downloadThread[x] =new DownloadThread(from, to); //放入任務
+				downloadThread[x] =new DownloadThread(from, to,x); //放入任務
 				book.addFileName(to);//
 				downloadThread[x].start();//執行任務
 			}
