@@ -18,13 +18,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
-
 
 public class Frame extends JFrame {
 
@@ -98,49 +96,92 @@ public class Frame extends JFrame {
 		downloadButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub //下載指令放置處
-				/*************下載指令*********/
-				double startTime,donTime,totTime;
-		    	startTime = System.currentTimeMillis();
-				if (check(pageTextField.getText(), bookNameTextField.getText(),
-						authorTextField.getText())) {//確認所有該填的資料都有填寫
-					downloader.setUP(Integer.parseInt(pageTextField.getText()),
-							urlTextField.getText());//分析網址
-					readHtml.setUp(option.threadNumber, bookNameTextField.getText(), authorTextField.getText());
-					resultTextArea.append("開始下載\r\n");
-					resultTextArea.paintImmediately(resultTextArea.getBounds());
-					try {
-						if (!downloader.downloading(option, readHtml,
-								resultTextArea)) {//開始下載
-							resultTextArea.append("下載失敗\r\n");//下載失敗
-							resultTextArea.paintImmediately(resultTextArea.getBounds());
-						} else {
-							donTime=System.currentTimeMillis()-startTime;
-							if (readHtml.makeBook(option)) {//開始解析所有的網頁
-								resultTextArea.append("小說製作完成\r\n");
-								resultTextArea.paintImmediately(resultTextArea.getBounds());
-								readHtml.delTempFile();
-								resultTextArea.append("清除暫存檔\r\n");
-								resultTextArea.paintImmediately(resultTextArea.getBounds());
-								totTime=System.currentTimeMillis()-startTime;
-								
-								resultTextArea.append("總共花費 "+ totTime+ "ms ;其中下載花費"+ donTime+ "ms 資料處理花費  "+(totTime-donTime)+"ms \r\n");
-								resultTextArea.paintImmediately(resultTextArea.getBounds());
+
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO 自動產生的方法 Stub
+						double startTime, donTime, totTime;
+						startTime = System.currentTimeMillis();
+						if (check(pageTextField.getText(),
+								bookNameTextField.getText(),
+								authorTextField.getText())) {// 確認所有該填的資料都有填寫
+							// 下載、見書兩大元件初始化
+							resultTextArea.append("初始化\r\n");
+							downloader.setUP(
+									Integer.parseInt(pageTextField.getText()),
+									urlTextField.getText(),resultTextArea);// 分析網址
+							readHtml.setUp(option.threadNumber,
+									bookNameTextField.getText(),
+									authorTextField.getText(),
+									downloader.getUrlData(),resultTextArea);
+							//
+							resultTextArea.append("開始下載\r\n");
+							// resultTextArea.paintImmediately(resultTextArea
+							// .getBounds());
+							resultTextArea.setCaretPosition(resultTextArea
+									.getText().length());
+							try {
+								if (!downloader.downloading(option, readHtml,
+										resultTextArea)) {// 開始下載
+									resultTextArea.append("下載失敗\r\n");// 下載失敗
+									// resultTextArea
+									// .paintImmediately(resultTextArea
+									// .getBounds());
+								} else {
+									donTime = System.currentTimeMillis()
+											- startTime;
+									if (readHtml.makeBook(option)) {// 開始解析所有的網頁
+										resultTextArea.append("小說製作完成\r\n");
+										// resultTextArea
+										// .paintImmediately(resultTextArea
+										// .getBounds());
+										resultTextArea
+												.setCaretPosition(resultTextArea
+														.getText().length());
+										readHtml.delTempFile();
+										resultTextArea.append("清除暫存檔\r\n");
+										// resultTextArea
+										// .paintImmediately(resultTextArea
+										// .getBounds());
+										resultTextArea
+												.setCaretPosition(resultTextArea
+														.getText().length());
+										totTime = System.currentTimeMillis()
+												- startTime;
+
+										resultTextArea.append("總共花費 " + totTime
+												+ "ms ;其中下載花費" + donTime
+												+ "ms 資料處理花費  "
+												+ (totTime - donTime)
+												+ "ms \r\n");
+										// resultTextArea
+										// .paintImmediately(resultTextArea
+										// .getBounds());
+									}
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
+						} else {
+							resultTextArea.append("下載失敗");
+							resultTextArea.setCaretPosition(resultTextArea.getText().length());
 						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
 					}
-				} else {
-					resultTextArea.append("下載失敗");
-				}
+
+				}).start();
+				// TODO Auto-generated method stub //下載指令放置處
+				/************* 下載指令 *********/
+
 			}
 		});
 		downloadPanel.add(downloadButton);
 		add(downloadPanel);
 
-		resultTextArea = new JTextArea(8, 50);//訊息視窗
+		resultTextArea = new JTextArea(8, 50);// 訊息視窗
 		resultTextArea.setLineWrap(true);
 		resultScrollPane = new JScrollPane(resultTextArea);
 		resultScrollPane
@@ -150,32 +191,36 @@ public class Frame extends JFrame {
 		resultPanel = new JPanel();
 		resultPanel.add(resultScrollPane);
 		add(resultPanel);
-		
+
 		resultTextArea.append("啟動中...\r\n");
-		
-		
-		option.printOption(resultTextArea);//印出初始訊息
-		
+
+		option.printOption(resultTextArea);// 印出初始訊息
+
 	}
-	
-	public void popVersionAlert(Option option)
-	{
+
+	public void popVersionAlert(Option option) {
 		try {
-			theNewVersion=checkVersion(option);
+			theNewVersion = checkVersion(option);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(theNewVersion>About.versionNumber)
-		{
-			resultTextArea.append("本軟體最新版本為"+String.valueOf(theNewVersion)+"請至http://code.google.com/p/jnoveldownload/downloads/list 下載最新版本\r\n");
-		}else{
-			resultTextArea.append("目前最新版本："+String.valueOf(theNewVersion)+"\r\n");
+		if (theNewVersion > About.versionNumber) {
+			resultTextArea
+					.append("本軟體最新版本為"
+							+ String.valueOf(theNewVersion)
+							+ "請至http://code.google.com/p/jnoveldownload/downloads/list 下載最新版本\r\n");
+		} else {
+			resultTextArea.append("目前最新版本：" + String.valueOf(theNewVersion)
+					+ "\r\n");
 		}
-		if(theNewVersion>About.versionNumber){
-			JOptionPane.showMessageDialog(null, "本軟體最新版本為"+String.valueOf(theNewVersion)+"請至官網 下載最新版本", "有更新版本喔!!", JOptionPane.WARNING_MESSAGE );
+		if (theNewVersion > About.versionNumber) {
+			JOptionPane.showMessageDialog(null,
+					"本軟體最新版本為" + String.valueOf(theNewVersion) + "請至官網 下載最新版本",
+					"有更新版本喔!!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
 	private boolean check(String page, String bookName, String author) {
 		if (!page.matches("[1-9][0-9]*")) {
 			resultTextArea.append("page..有誤");
@@ -189,13 +234,12 @@ public class Frame extends JFrame {
 		} else
 			return true;
 	}
-	
-	private double checkVersion(Option option) throws Exception
-	{
-		String targetURL="http://code.google.com/p/jnoveldownload/downloads/list";
-		String to=option.tempPath+"version.html";
-		double version=0;
-		DownloadThread downloadThread=new DownloadThread(targetURL, to,0);
+
+	private double checkVersion(Option option) throws Exception {
+		String targetURL = "http://code.google.com/p/jnoveldownload/downloads/list";
+		String to = option.tempPath + "version.html";
+		double version = 0;
+		DownloadThread downloadThread = new DownloadThread(targetURL, to, 0);
 		try {
 			downloadThread.start();
 			downloadThread.join();
@@ -207,19 +251,21 @@ public class Frame extends JFrame {
 		// <a href="detail?name=JNovelDownloader_v2_1.jar&amp;can=2&amp;q=">
 		String temp;
 		while ((temp = reader.readLine()) != null) {
-			if(temp.indexOf("detail?name=JNovelDownloader")>=0){
-				String temp2[]=temp.split("_");
-				version=Double.parseDouble(temp2[1].charAt(1)+"."+temp2[2].charAt(0));
+			if (temp.indexOf("detail?name=JNovelDownloader") >= 0) {
+				String temp2[] = temp.split("_");
+				version = Double.parseDouble(temp2[1].charAt(1) + "."
+						+ temp2[2].charAt(0));
 				break;
 			}
 		}
 		reader.close();
-		
+
 		return version;
 	}
-	
-	public void popPathAlert(){
-		JOptionPane.showMessageDialog(null, "您的小說下載路徑或是暫存路徑有問題，請選擇[設定]重新設定", "路徑有問題", JOptionPane.WARNING_MESSAGE );
+
+	public void popPathAlert() {
+		JOptionPane.showMessageDialog(null, "您的小說下載路徑或是暫存路徑有問題，請選擇[設定]重新設定",
+				"路徑有問題", JOptionPane.WARNING_MESSAGE);
 	}
 
 }

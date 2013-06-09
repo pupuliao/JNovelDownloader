@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import javax.swing.JTextArea;
+
 import JNovelDownloader.Option.Option;
 
 public class ReadHtml {
@@ -15,7 +17,9 @@ public class ReadHtml {
 //	private BufferedReader reader;
 	// private String path;
 	private OutputStreamWriter writer;
-
+	private String domain;
+	private JTextArea resultTextArea;
+	
 	public ReadHtml() {
 		// TODO Auto-generated constructor stub
 
@@ -28,11 +32,13 @@ public class ReadHtml {
 		// path = "";
 	}
 
-	public void setUp(int threadNumber, String bookName, String author) {
+	public void setUp(int threadNumber, String bookName, String author,UrlData urlData,JTextArea resultTextArea) {
 		fileName = new String[threadNumber][];
 		this.bookName = bookName;
 		this.author = author;
 		havethread = 0;
+		this.domain=urlData.domain;
+		this.resultTextArea=resultTextArea;
 	}
 
 	public void setPage(int page) {
@@ -122,10 +128,17 @@ public class ReadHtml {
 		writer = new OutputStreamWriter(new FileOutputStream(option.novelPath
 				+ bookName + ".txt"), "UTF-8");
 		writer.write(bookName + "\r\n" + author + "\r\n");
+		resultTextArea.append("\r\n開始分析網頁\r\n");
+		resultTextArea.setCaretPosition(resultTextArea.getText()
+				.length());
+		int type;
+		if(domain.indexOf("eyny") >= 0){
+			type=1;
+		}else type=0;
 //		Encoding encoding=new Encoding();
 		MakeBookThread [] makeBookThreads =new MakeBookThread[option.threadNumber];
 		for (int n=0;n<option.threadNumber;n++){
-			makeBookThreads[n]=new MakeBookThread(fileName[n], option.encoding);
+			makeBookThreads[n]=new MakeBookThread(fileName[n], option.encoding,type,resultTextArea);
 			makeBookThreads[n].start();
 		}
 		try {//等全部跑完才繼續

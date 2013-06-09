@@ -6,7 +6,7 @@ public class Analysis {
 	}
 
 	public static UrlData analysisUrl(String data) {
-		//ck101.com/forum.php?mod=viewthread&tid=1961368&page=1
+		// ck101.com/forum.php?mod=viewthread&tid=1961368&page=1
 		UrlData result = new UrlData();
 		System.out.println(data);
 		result.urlString = data;
@@ -16,18 +16,22 @@ public class Analysis {
 			result.wrongUrl = true;
 			return result;
 		}
-		result.page=1; //避免網址列中沒有頁碼
+		result.page = 1; // 避免網址列中沒有頁碼
 		result.domain = temp[temp.length - 2];
 		System.out.println(result.domain);
 		String A = temp[temp.length - 1];
-		if (A.indexOf("forum.php?") >=0) {
+		if (A.indexOf("forum.php?") < 0) {
+			temp=A.split("\\?");
+			A=temp[0];
+		}
+		if (A.indexOf("forum.php?") >= 0) {
 			String[] temp2 = A.split("=|&");
 			for (int n = 0; n < temp2.length; n++) {
 				if (temp2[n].equals("tid"))
 					result.Tid = Integer.parseInt(temp2[n + 1]);
 				if (temp2[n].equals("page"))
 					result.page = Integer.parseInt(temp2[n + 1]);
-				
+
 			}
 			result.wrongUrl = false;
 		} else if (A.matches("thread-[0-9]+-[0-9]+-[0-9].html")) {
@@ -35,6 +39,7 @@ public class Analysis {
 			result.Tid = Integer.parseInt(temp2[1]);
 			result.page = Integer.parseInt(temp2[2]);
 		} else {
+			System.out.println("分析出錯");
 			result.wrongUrl = true;
 		}
 
