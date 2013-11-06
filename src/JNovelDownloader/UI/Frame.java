@@ -107,7 +107,7 @@ public class Frame extends JFrame {
 						if (check(pageTextField.getText(),
 								bookNameTextField.getText(),
 								authorTextField.getText())) {// 確認所有該填的資料都有填寫
-							// 下載、見書兩大元件初始化
+							// 下載、建書兩大元件初始化
 							resultTextArea.append("初始化\r\n");
 							downloader.setUP(
 									Integer.parseInt(pageTextField.getText()),

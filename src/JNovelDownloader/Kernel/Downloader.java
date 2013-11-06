@@ -49,8 +49,9 @@ public class Downloader {
 		// http://ck101.com/thread-1753100-55-1.html
 		urlStrings = new String[toPage - urlData.page + 1];
 		if (urlData.domain.indexOf("eyny") >= 0) {
+			//http://www02.eyny.com/archiver/?tid-8910527.html&mobile=yes
 			String temp = "http://" + urlData.domain
-					+ "/forum.php?mod=viewthread&tid="
+					+ "/archiver/?tid-"
 					+ String.valueOf(urlData.Tid) + "&mobile=yes&page=";
 			int m = 0;
 			for (int n = urlData.page; n <= toPage; n++) {
@@ -119,9 +120,9 @@ public class Downloader {
 					.getText().length());
 			return false;
 		} else {
-			if (urlData.domain.indexOf("eyny") >= 0) {
+		/*	if (urlData.domain.indexOf("eyny") >= 0) {
 				Downloader.sendLoginRequest();
-			}
+			} */
 			generateUrlList();
 			// http://ck101.com/thread-1753100-55-1.html
 			int m = 0;
@@ -157,11 +158,7 @@ public class Downloader {
 					from[y] = urlStrings[m];
 					to[y] = totalTo[m++];
 				}
-				if (urlData.domain.indexOf("eyny") >= 0) {
-					downloadThread[x] = new DownloadThread(from, to, x,
-							sessionId,resultTextArea);
-				} else
-					downloadThread[x] = new DownloadThread(from, to, x,resultTextArea);
+				downloadThread[x] = new DownloadThread(from, to, x,resultTextArea);
 				// 放入任務
 				// downloadThread[x] = new DownloadThread(from, to, x); // 放入任務
 				book.addFileName(to);//

@@ -30,7 +30,9 @@ public class main {
 
 //		int[][] d=new int[5][2];
 		
-//		String test1 ="<div id=\"postmessage_81898396\" class=\"postmessage\"><font color=\"DarkOrchid\">第九百五十四節大結局<br />";
+//		String test1 ="第一章 殺手不好做，咱轉行吧";
+//		System.out.println(test1.matches("第[一二三四五六七八九十百零1234567890 　]*章 [^<>]*"));
+
 //		String[] temp2 = test1.split("class=\"postmessage\">");// 接取標題
 //		// 如果有
 //		// 會有內容，如果沒有是空字串

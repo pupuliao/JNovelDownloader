@@ -17,7 +17,7 @@ public class DownloadThread extends Thread {
 	private String[] to;
 	public boolean downloadstate;
 	private int threatNember;
-	private String sessionId = null;
+//	private String sessionId = null;
 	private JTextArea resultTextArea = null;
 
 	public DownloadThread(String[] from, String[] to, int t) {
@@ -35,7 +35,7 @@ public class DownloadThread extends Thread {
 		this.threatNember = t;
 		downloadstate = true;
 	}
-
+/*
 	public DownloadThread(String[] from, String[] to, int t, String sessionId) {
 		this.from = from;
 		this.to = to;
@@ -53,14 +53,14 @@ public class DownloadThread extends Thread {
 		downloadstate = true;
 		this.sessionId = sessionId;
 	}
-
+*/
 	public DownloadThread(String[] from, String[] to, int t, String sessionId,
 			JTextArea resultTextArea) {
 		this.from = from;
 		this.to = to;
 		this.threatNember = t;
 		downloadstate = true;
-		this.sessionId = sessionId;
+//		this.sessionId = sessionId;
 		this.resultTextArea = resultTextArea;
 	}
 
@@ -72,7 +72,7 @@ public class DownloadThread extends Thread {
 		this.to[0] = to;
 		this.threatNember = t;
 		downloadstate = true;
-		this.sessionId = sessionId;
+//		this.sessionId = sessionId;
 		this.resultTextArea = resultTextArea;
 	}
 	public DownloadThread(String[] from, String[] to, int t,JTextArea resultTextArea) {
@@ -107,17 +107,17 @@ public class DownloadThread extends Thread {
 				URL url = new URL(from[n]);
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
-				if (from[n].indexOf("eyny") >= 0) {
-					// System.out.println(this.sessionId);
-					connection.setRequestProperty("Accept-Language",
-							"zh-tw,zh;q=0.8,en-us;q=0.5,en;q=0.3");
-					connection.setRequestProperty("Accept-Encoding",
-							"gzip, deflate");
-					connection
-							.setRequestProperty(
-									"Referer",
-									"http://www.eyny.com/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LhRX4&mobile=yes");
-					connection.setRequestProperty("Cookie", this.sessionId);
+//				if (from[n].indexOf("eyny") >= 0) {
+//					// System.out.println(this.sessionId);
+//					connection.setRequestProperty("Accept-Language",
+//							"zh-tw,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+//					connection.setRequestProperty("Accept-Encoding",
+//							"gzip, deflate");
+//					connection
+//							.setRequestProperty(
+//									"Referer",
+//									"http://www.eyny.com/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LhRX4&mobile=yes");
+//					connection.setRequestProperty("Cookie", this.sessionId);
 					// connection.setRequestProperty("Cookie",
 					// "djAX_e8d7_auth=e4adhZuKtBNY0HGXxiX8yuumrUsNOKXL65EeTqh9W69SNjvC7AvHRii1oZQJhyOZxWjJ4vOAvlDo6eUUvu1qRPk2Na4");
 					// connection.setRequestMethod("POST");
@@ -125,7 +125,7 @@ public class DownloadThread extends Thread {
 					// OutputStream os = connection.getOutputStream(); //
 					// 输出流，写数据
 					// os.write("..........".getBytes());
-				}
+				//}
 				//
 				connection.setDoOutput(true);//
 				switch (threatNember) {
