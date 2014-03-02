@@ -34,7 +34,7 @@ public class Analysis {
 
 			}
 			result.wrongUrl = false;
-		} else if (A.matches("thread-[0-9]+-[0-9]+-[0-9].html")) {
+		} else if (A.matches("thread-[0-9]+-[0-9]+-[0-9]+.html")) {
 			String[] temp2 = A.split("-");
 			result.Tid = Integer.parseInt(temp2[1]);
 			result.page = Integer.parseInt(temp2[2]);

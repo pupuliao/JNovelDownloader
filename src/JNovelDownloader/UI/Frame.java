@@ -236,7 +236,8 @@ public class Frame extends JFrame {
 	}
 
 	private double checkVersion(Option option) throws Exception {
-		String targetURL = "http://code.google.com/p/jnoveldownload/downloads/list";
+		//String targetURL = "http://code.google.com/p/jnoveldownload/downloads/list";
+		String targetURL = "http://sourceforge.net/projects/jnoveldownload/files";
 		String to = option.tempPath + "version.html";
 		double version = 0;
 		DownloadThread downloadThread = new DownloadThread(targetURL, to, 0);
@@ -251,7 +252,7 @@ public class Frame extends JFrame {
 		// <a href="detail?name=JNovelDownloader_v2_1.jar&amp;can=2&amp;q=">
 		String temp;
 		while ((temp = reader.readLine()) != null) {
-			if (temp.indexOf("detail?name=JNovelDownloader") >= 0) {
+			if (temp.indexOf("<tr title=\"JNovelDownloader_v") >= 0) {
 				String temp2[] = temp.split("_");
 				version = Double.parseDouble(temp2[1].charAt(1) + "."
 						+ temp2[2].charAt(0));
