@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.print.Book;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,9 +19,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.sun.org.apache.xml.internal.dtm.Axis;
+
+import JNovelDownloader.Kernel.Analysis;
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
+import JNovelDownloader.Kernel.UrlData;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
 
@@ -104,70 +109,78 @@ public class Frame extends JFrame {
 						// TODO 自動產生的方法 Stub
 						double startTime, donTime, totTime;
 						startTime = System.currentTimeMillis();
-						if (check(pageTextField.getText(),
-								bookNameTextField.getText(),
-								authorTextField.getText())) {// 確認所有該填的資料都有填寫
-							// 下載、建書兩大元件初始化
-							resultTextArea.append("初始化\r\n");
-							downloader.setUP(
-									Integer.parseInt(pageTextField.getText()),
-									urlTextField.getText(),resultTextArea);// 分析網址
-							readHtml.setUp(option.threadNumber,
+						try {
+							if (check(option,pageTextField.getText(),
 									bookNameTextField.getText(),
-									authorTextField.getText(),
-									downloader.getUrlData(),resultTextArea);
-							//
-							resultTextArea.append("開始下載\r\n");
-							// resultTextArea.paintImmediately(resultTextArea
-							// .getBounds());
-							resultTextArea.setCaretPosition(resultTextArea
-									.getText().length());
-							try {
-								if (!downloader.downloading(option, readHtml,
-										resultTextArea)) {// 開始下載
-									resultTextArea.append("下載失敗\r\n");// 下載失敗
-									// resultTextArea
-									// .paintImmediately(resultTextArea
-									// .getBounds());
-								} else {
-									donTime = System.currentTimeMillis()
-											- startTime;
-									if (readHtml.makeBook(option)) {// 開始解析所有的網頁
-										resultTextArea.append("小說製作完成\r\n");
+									authorTextField.getText(),urlTextField.getText()) ) {// 確認所有該填的資料都有填寫
+								// 下載、建書兩大元件初始化
+								resultTextArea.append("初始化\r\n");
+								downloader.setUP(
+										Integer.parseInt(pageTextField.getText()),
+										urlTextField.getText(),resultTextArea);// 分析網址
+								readHtml.setUp(option.threadNumber,
+										bookNameTextField.getText(),
+										authorTextField.getText(),
+										downloader.getUrlData(),resultTextArea);
+								//
+								resultTextArea.append("開始下載\r\n");
+								// resultTextArea.paintImmediately(resultTextArea
+								// .getBounds());
+								resultTextArea.setCaretPosition(resultTextArea
+										.getText().length());
+								try {
+									if (!downloader.downloading(option, readHtml,
+											resultTextArea)) {// 開始下載
+										resultTextArea.append("下載失敗\r\n");// 下載失敗
 										// resultTextArea
 										// .paintImmediately(resultTextArea
 										// .getBounds());
-										resultTextArea
-												.setCaretPosition(resultTextArea
-														.getText().length());
-										readHtml.delTempFile();
-										resultTextArea.append("清除暫存檔\r\n");
-										// resultTextArea
-										// .paintImmediately(resultTextArea
-										// .getBounds());
-										resultTextArea
-												.setCaretPosition(resultTextArea
-														.getText().length());
-										totTime = System.currentTimeMillis()
+									} else {
+										donTime = System.currentTimeMillis()
 												- startTime;
+										if (readHtml.makeBook(option)) {// 開始解析所有的網頁
+											resultTextArea.append("小說製作完成\r\n");
+											// resultTextArea
+											// .paintImmediately(resultTextArea
+											// .getBounds());
+											resultTextArea
+													.setCaretPosition(resultTextArea
+															.getText().length());
+											readHtml.delTempFile();
+											resultTextArea.append("清除暫存檔\r\n");
+											// resultTextArea
+											// .paintImmediately(resultTextArea
+											// .getBounds());
+											resultTextArea
+													.setCaretPosition(resultTextArea
+															.getText().length());
+											totTime = System.currentTimeMillis()
+													- startTime;
 
-										resultTextArea.append("總共花費 " + totTime
-												+ "ms ;其中下載花費" + donTime
-												+ "ms 資料處理花費  "
-												+ (totTime - donTime)
-												+ "ms \r\n");
-										// resultTextArea
-										// .paintImmediately(resultTextArea
-										// .getBounds());
+											resultTextArea.append("總共花費 " + totTime
+													+ "ms ;其中下載花費" + donTime
+													+ "ms 資料處理花費  "
+													+ (totTime - donTime)
+													+ "ms \r\n");
+											// resultTextArea
+											// .paintImmediately(resultTextArea
+											// .getBounds());
+										}
 									}
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							} else {
+								resultTextArea.append("下載失敗");
+								resultTextArea.setCaretPosition(resultTextArea.getText().length());
 							}
-						} else {
-							resultTextArea.append("下載失敗");
-							resultTextArea.setCaretPosition(resultTextArea.getText().length());
+						} catch (NumberFormatException e) {
+							// TODO 自動產生的 catch 區塊
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO 自動產生的 catch 區塊
+							e.printStackTrace();
 						}
 
 					}
@@ -221,18 +234,30 @@ public class Frame extends JFrame {
 		}
 	}
 
-	private boolean check(String page, String bookName, String author) {
-		if (!page.matches("[1-9][0-9]*")) {
-			resultTextArea.append("page..有誤");
-			return false;
-		} else if (bookName.isEmpty()) {
-			resultTextArea.append("bookName..有誤");
-			return false;
-		} else if (author.isEmpty()) {
-			resultTextArea.append("author..有誤");
-			return false;
-		} else
-			return true;
+	private boolean check(Option option,String page, String bookName, String author,String url) throws IOException {
+		
+		if(page.isEmpty() || bookName.isEmpty() || author.isEmpty()){
+			UrlData urlData=Analysis.analysisUrl(url);
+			if (urlData.wrongUrl) {
+				resultTextArea.append("網址有問題 無法分析\r\n");
+				return false;
+			}
+			else {
+				int p=getPage(option, url);
+				if(page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
+					pageTextField.setText(String.valueOf(p));
+				}
+				if(bookName.isEmpty()){
+					bookNameTextField.setText(getTittle(option));
+				}
+				if(author.isEmpty()){
+					authorTextField.setText("預設作者");
+				}
+			}
+			
+		
+		}
+		return true;
 	}
 
 	private double checkVersion(Option option) throws Exception {
@@ -267,6 +292,57 @@ public class Frame extends JFrame {
 	public void popPathAlert() {
 		JOptionPane.showMessageDialog(null, "您的小說下載路徑或是暫存路徑有問題，請選擇[設定]重新設定",
 				"路徑有問題", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	private int getPage(Option option,String url) throws IOException {
+		int result = 0;
+		DownloadThread downloadthread = new DownloadThread(url, option.tempPath
+				+ "/temp.html", 1);
+		downloadthread.start();
+		try {
+			downloadthread.join();
+		} catch (InterruptedException e) {
+
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(option.tempPath + "/temp.html"), "UTF-8"));
+		String temp;
+		String temp2[];
+		while ((temp = reader.readLine()) != null) {
+			if (temp.indexOf("class=\"pg\"") >= 0) {
+				if (temp.indexOf("class=\"last\"") >= 0) {
+					temp2 = temp.split("class=\"last\">.. ");
+					temp2 = temp2[1].split("</a>");
+					result = Integer.parseInt(temp2[0]);
+				}else if(temp.indexOf("<strong>")>=0){
+					temp2 = temp.split("<strong>");
+					temp2 = temp2[1].split("</strong>");
+					result = Integer.parseInt(temp2[0]);
+				}
+				break;
+			}
+		}
+		reader.close();
+		return result;
+
+	}
+
+	private String getTittle(Option option) throws IOException {// 必須要先執行過getPage
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(option.tempPath + "/temp.html"), "UTF-8"));
+		String temp;
+		String temp2[];
+		String result = null;
+		while ((temp = reader.readLine()) != null) {
+			if (temp.indexOf("<title>") >= 0) {
+				temp2 = temp.split("title>");
+				temp2 = temp2[1].split(" - ");
+				result = temp2[0];
+				break;
+			}
+		}
+		reader.close();
+		return result;
 	}
 
 }

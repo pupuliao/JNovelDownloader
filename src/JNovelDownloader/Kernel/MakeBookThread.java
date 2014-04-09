@@ -157,7 +157,8 @@ public class MakeBookThread extends Thread {
 		Pattern p_html = Pattern.compile("<[^>]+>", Pattern.CASE_INSENSITIVE);
 		Matcher m_html;
 		// String regEx_html = "<[^>]+>";
-
+		Pattern pModStamp = Pattern
+				.compile(" 本帖最後由 \\S+ 於 \\d{4}-\\d{1,2}-\\d{1,2} \\d{2}:\\d{2} (\\S{2} )?編輯 ");
 		for (int n = 0; n < html.length; n++) {
 			try {
 				reader = new BufferedReader(new InputStreamReader(
@@ -185,6 +186,7 @@ public class MakeBookThread extends Thread {
 							temp = Replace.replace(temp, " ", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
+							
 							// if (flag == false
 							// &&
 							// temp.matches("第[一二三四五六七八九十百零1234567890 　]*章 [^<>]*"))
@@ -226,6 +228,8 @@ public class MakeBookThread extends Thread {
 												"<font color=\"#999999\">[^<>]+</font>",
 												"");
 							}
+							m_html=pModStamp.matcher(temp);
+							temp = m_html.replaceAll("");
 							temp += "\r\n";
 							temp = Replace.replace(temp, "<br/>", "\r\n");
 							temp = Replace.replace(temp, "<br />", "\r\n");
@@ -265,7 +269,8 @@ public class MakeBookThread extends Thread {
 						}
 						if (otherTable == 0) {
 							// 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
-
+							m_html=pModStamp.matcher(temp);
+							temp = m_html.replaceAll("");
 							temp = Replace.replace(temp, "<br/>", "\r\n");
 							temp = Replace.replace(temp, "<br />", "\r\n");
 							temp = Replace.replace(temp, "&nbsp;", "");
