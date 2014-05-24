@@ -222,7 +222,7 @@ public class Frame extends JFrame {
 			resultTextArea
 					.append("本軟體最新版本為"
 							+ String.valueOf(theNewVersion)
-							+ "請至http://code.google.com/p/jnoveldownload/downloads/list 下載最新版本\r\n");
+							+ "請至http://www.pupuliao.info 下載最新版本\r\n");
 		} else {
 			resultTextArea.append("目前最新版本：" + String.valueOf(theNewVersion)
 					+ "\r\n");

@@ -177,7 +177,7 @@ public class MakeBookThread extends Thread {
 				while ((temp = reader.readLine()) != null) { // 一次讀取一行
 					switch (stage) {
 					case 0:
-						if (temp.indexOf("<div class=\"pbody\">") >= 0) {
+						if (temp.indexOf("class=\"pbody\">") >= 0) {
 							stage = 1;
 						}
 						break;
@@ -204,7 +204,7 @@ public class MakeBookThread extends Thread {
 							bookData.append(temp);
 							bookData.append("\r\n");
 						}
-						if (temp.indexOf("<div class=\"mes\">") >= 0) {
+						if (temp.indexOf("<div class=\"mes \">") >= 0) {
 							stage = 2;
 						}
 						break;
@@ -289,6 +289,7 @@ public class MakeBookThread extends Thread {
 							temp = m_html.replaceAll("");
 							temp = temp.replaceAll("^[ \t　]+", ""); // 過濾凸排
 							bookData.append(temp);
+							//System.out.println(temp);
 						}
 
 						break;
@@ -309,6 +310,7 @@ public class MakeBookThread extends Thread {
 			}
 		}
 		Encoding encoding = new Encoding();
+	//	System.out.println(bookData.toString());
 		if (this.encoding) {
 			result = encoding.StoT(bookData.toString());
 		} else {
