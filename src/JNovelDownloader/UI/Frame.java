@@ -73,13 +73,31 @@ public class Frame extends JFrame {
 		add(settingButton);
 		/********************** 設定書名 ***************************/
 		bookNameLabel = new JLabel("小說名稱");
-		bookNameTextField = new JTextField("", 20);
+		String os = System.getProperty("os.name").toLowerCase();
+//		if(os.indexOf("win") >= 0)
+//		{
+			bookNameTextField = new JTextField("", 20);
+//			
+//		}
+//		else
+//		{
+//			bookNameTextField = new JTextFieldSelf("", 20);
+//		}
+
 		bookNamePanel = new JPanel();
 		bookNamePanel.add(bookNameLabel);
 		bookNamePanel.add(bookNameTextField);
 
 		authorLabel = new JLabel("作者");
-		authorTextField = new JTextField("", 20);
+//		if(os.indexOf("win") >= 0)
+//		{
+			authorTextField = new JTextField("", 20);
+//		}
+//		else
+//		{
+//			authorTextField = new JTextFieldSelf("", 20);
+//		}
+
 		bookNamePanel.add(authorLabel);
 		bookNamePanel.add(authorTextField);
 		add(bookNamePanel);

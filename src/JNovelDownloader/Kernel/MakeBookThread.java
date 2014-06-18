@@ -19,6 +19,7 @@ public class MakeBookThread extends Thread {
 	private String result;
 	private int type;
 	private JTextArea resultTextArea;
+	private String lineSeparator;
 
 	public MakeBookThread(String[] data, boolean encoding, int type,
 			JTextArea resultTextArea) {
@@ -27,6 +28,7 @@ public class MakeBookThread extends Thread {
 		this.encoding = encoding;
 		this.type = type;
 		this.resultTextArea = resultTextArea;
+		this.lineSeparator=System.getProperty("line.separator");
 	}
 
 	public void run() {
@@ -91,7 +93,7 @@ public class MakeBookThread extends Thread {
 						if (m_html.find()) {
 							if ((temp = m_html.group(1)) != null)// 分組0
 																	// <h3>1</h3>2
-								bookData.append(temp + "\r\n");
+								bookData.append(temp + lineSeparator);
 							stage = 3;
 						}
 						break;
@@ -112,8 +114,8 @@ public class MakeBookThread extends Thread {
 							stage = 0;
 						}
 						temp = Replace.replace(temp, "&nbsp;", "");
-						temp = Replace.replace(temp, "<br/>", "\r\n");
-						temp = Replace.replace(temp, "<br />", "\r\n");
+						temp = Replace.replace(temp, "<br/>", lineSeparator);
+						temp = Replace.replace(temp, "<br />", lineSeparator);
 						m_html = p_html.matcher(temp);
 						temp = m_html.replaceAll("");
 						temp = temp.replaceAll("^[ \t　]+", "");
@@ -129,7 +131,7 @@ public class MakeBookThread extends Thread {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			bookData.append("\r\n");
+			bookData.append(lineSeparator);
 			try {
 				reader.close();
 			} catch (IOException e) {
@@ -171,7 +173,7 @@ public class MakeBookThread extends Thread {
 				e1.printStackTrace();
 			} // 開啟檔案
 			System.out.println(html[n] + "處理中");
-			resultTextArea.append(html[n] + "處理中\r\n");
+			resultTextArea.append(html[n] + "處理中"+lineSeparator);
 			resultTextArea.setCaretPosition(resultTextArea.getText().length());
 			try {
 				while ((temp = reader.readLine()) != null) { // 一次讀取一行
@@ -202,7 +204,7 @@ public class MakeBookThread extends Thread {
 							// flag = true;
 							// }
 							bookData.append(temp);
-							bookData.append("\r\n");
+							bookData.append(lineSeparator);
 						}
 						if (temp.indexOf("<div class=\"mes \">") >= 0) {
 							stage = 2;
@@ -230,9 +232,9 @@ public class MakeBookThread extends Thread {
 							}
 							m_html=pModStamp.matcher(temp);
 							temp = m_html.replaceAll("");
-							temp += "\r\n";
-							temp = Replace.replace(temp, "<br/>", "\r\n");
-							temp = Replace.replace(temp, "<br />", "\r\n");
+							temp += lineSeparator;
+							temp = Replace.replace(temp, "<br/>", lineSeparator);
+							temp = Replace.replace(temp, "<br />", lineSeparator);
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
@@ -264,15 +266,15 @@ public class MakeBookThread extends Thread {
 								temp = temp.replace("</div>", " ");
 								stage = 0;
 								flag = false;
-								temp += "\r\n\r\n\r\n";
+								temp += lineSeparator+lineSeparator+lineSeparator;
 							}
 						}
 						if (otherTable == 0) {
 							// 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
 							m_html=pModStamp.matcher(temp);
 							temp = m_html.replaceAll("");
-							temp = Replace.replace(temp, "<br/>", "\r\n");
-							temp = Replace.replace(temp, "<br />", "\r\n");
+							temp = Replace.replace(temp, "<br/>", lineSeparator);
+							temp = Replace.replace(temp, "<br />", lineSeparator);
 							temp = Replace.replace(temp, "&nbsp;", "");
 							m_html = p_html.matcher(temp);
 							// if(flag==false &&
@@ -301,7 +303,7 @@ public class MakeBookThread extends Thread {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			bookData.append("\r\n");
+			bookData.append(lineSeparator);
 			try {
 				reader.close();
 			} catch (IOException e) {

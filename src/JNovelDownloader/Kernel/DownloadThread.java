@@ -94,6 +94,7 @@ public class DownloadThread extends Thread {
 	}
 
 	public void run() {
+		int downloadmiss=0;
 		for (int n = 0; n < this.to.length; n++) {
 			StringBuffer total = new StringBuffer();
 
@@ -108,25 +109,7 @@ public class DownloadThread extends Thread {
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
 //				if (from[n].indexOf("eyny") >= 0) {
-//					// System.out.println(this.sessionId);
-//					connection.setRequestProperty("Accept-Language",
-//							"zh-tw,zh;q=0.8,en-us;q=0.5,en;q=0.3");
-//					connection.setRequestProperty("Accept-Encoding",
-//							"gzip, deflate");
-//					connection
-//							.setRequestProperty(
-//									"Referer",
-//									"http://www.eyny.com/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LhRX4&mobile=yes");
-//					connection.setRequestProperty("Cookie", this.sessionId);
-					// connection.setRequestProperty("Cookie",
-					// "djAX_e8d7_auth=e4adhZuKtBNY0HGXxiX8yuumrUsNOKXL65EeTqh9W69SNjvC7AvHRii1oZQJhyOZxWjJ4vOAvlDo6eUUvu1qRPk2Na4");
-					// connection.setRequestMethod("POST");
-					// connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-					// OutputStream os = connection.getOutputStream(); //
-					// 输出流，写数据
-					// os.write("..........".getBytes());
-				//}
-				//
+
 				connection.setDoOutput(true);//
 				switch (threatNember) {
 				case 0:
@@ -167,20 +150,49 @@ public class DownloadThread extends Thread {
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(inStream, "utf8"));
 				String line = "";
+				String lineSeparator=System.getProperty("line.separator");
 				while ((line = reader.readLine()) != null) {
-					total.append(line + "\n");
+					total.append(line + lineSeparator);
 				}
 				// System.out.println("檔案："+total);
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("取得網頁html時發生錯誤");
+				System.out.println("取得網頁html時發生錯誤....");
 				if (resultTextArea != null) {
 					resultTextArea.append("\r\n取得網頁html時發生錯誤");
 					resultTextArea.setCaretPosition(resultTextArea.getText()
 							.length());
 				}
-				downloadstate = false;
-				return;
+				if(downloadmiss>20)
+				{
+					downloadmiss++;
+					System.out.println("等待一秒嘗試重新下載....");
+					if (resultTextArea != null) {
+						resultTextArea.append("\r\n等待一秒嘗試重新下載....");
+						resultTextArea.setCaretPosition(resultTextArea.getText()
+								.length());
+					}
+					n--;
+					try {
+						this.sleep(1000);
+					} catch (InterruptedException e1) {
+						// TODO 自動產生的 catch 區塊
+						e1.printStackTrace();
+					}
+					continue;
+				}
+				else
+				{
+					System.out.println("沒救了....");
+					if (resultTextArea != null) {
+						resultTextArea.append("\r\n沒救了....");
+						resultTextArea.setCaretPosition(resultTextArea.getText()
+								.length());
+					}
+					downloadstate = false;
+					return;
+				}
+
 			}
 			try {
 				OutputStreamWriter writer = new OutputStreamWriter(
