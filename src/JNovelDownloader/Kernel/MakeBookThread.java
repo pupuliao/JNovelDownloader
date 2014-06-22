@@ -103,16 +103,29 @@ public class MakeBookThread extends Thread {
 							break;
 						if (temp.indexOf("<p class=\"author\">") >= 0) {
 							stage = 1;
-							break;
+//							break;
 						}
 						if ((end = temp.indexOf("...&lt;div class='locked'")) == 0) {
-							stage = 0;
+							if (temp.indexOf("<p class=\"author\">") >= 0) {
+								stage = 1;
+							}
+							else {
+								stage = 0;
+							}
 							break;
 						}
+
 						if (end > 0) {
+							if (temp.indexOf("<p class=\"author\">") >= 0) {
+								stage = 1;
+							}
+							else {
+								stage = 0;
+							}
 							temp = temp.substring(0, end - 1);
-							stage = 0;
+							temp=temp+lineSeparator;
 						}
+						
 						temp = Replace.replace(temp, "&nbsp;", "");
 						temp = Replace.replace(temp, "<br/>", lineSeparator);
 						temp = Replace.replace(temp, "<br />", lineSeparator);
