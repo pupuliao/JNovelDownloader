@@ -219,13 +219,14 @@ public class MakeBookThread extends Thread {
 							bookData.append(temp);
 							bookData.append(lineSeparator);
 						}
-						if (temp.indexOf("<div class=\"mes \">") >= 0) {
+						if (temp.indexOf("<div class=\"mes ") >= 0) {
 							stage = 2;
 						}
 						break;
 					case 2:
 						if (temp.indexOf("class=\"postmessage\">") >= 0) {// 找出
 																			// 文章內容
+							System.out.println(temp);
 							stage = 3;
 							// String[] temp2 =
 							// temp.split("class=\"postmessage\">");// 接取標題
