@@ -25,6 +25,7 @@ import JNovelDownloader.Kernel.Analysis;
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
+import JNovelDownloader.Kernel.Replace;
 import JNovelDownloader.Kernel.UrlData;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
@@ -332,6 +333,12 @@ public class Frame extends JFrame {
 					temp2 = temp.split("class=\"last\">.. ");
 					temp2 = temp2[1].split("</a>");
 					result = Integer.parseInt(temp2[0]);
+				}else if(temp.indexOf("class=\"nxt\"") >= 0){
+					temp2 = temp.split("class=\"nxt\"");
+					temp2 = temp2[0].split("<a href");
+					temp2 = temp2[temp2.length-2].split("</a>");
+					temp2 = temp2[0].split(">");
+					result = Integer.parseInt(temp2[1]);
 				}else if(temp.indexOf("<strong>")>=0){
 					temp2 = temp.split("<strong>");
 					temp2 = temp2[1].split("</strong>");
@@ -356,6 +363,10 @@ public class Frame extends JFrame {
 				temp2 = temp.split("title>");
 				temp2 = temp2[1].split(" - ");
 				result = temp2[0];
+//				result = Replace.replace(result, "【", "[");
+//				result = Replace.replace(result, "】", "]");
+				result = Replace.replace(result, ":", "");
+				result = Replace.replace(result, " ", "");
 				break;
 			}
 		}

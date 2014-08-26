@@ -122,7 +122,7 @@ public class MakeBookThread extends Thread {
 							else {
 								stage = 0;
 							}
-							temp = temp.substring(0, end - 1);
+							temp = temp.substring(0, end);
 							temp=temp+lineSeparator;
 						}
 						
