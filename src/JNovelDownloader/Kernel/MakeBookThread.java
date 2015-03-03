@@ -32,6 +32,7 @@ public class MakeBookThread extends Thread {
 	}
 
 	public void run() {
+		System.out.println(type);
 		if (type == 1) {
 			this.runType1();
 		} else {
@@ -192,7 +193,7 @@ public class MakeBookThread extends Thread {
 				while ((temp = reader.readLine()) != null) { // 一次讀取一行
 					switch (stage) {
 					case 0:
-						if (temp.indexOf("class=\"pbody\">") >= 0) {
+						if (temp.indexOf("class=\"pbody") >= 0) {
 							stage = 1;
 						}
 						break;
@@ -219,14 +220,15 @@ public class MakeBookThread extends Thread {
 							bookData.append(temp);
 							bookData.append(lineSeparator);
 						}
-						if (temp.indexOf("<div class=\"mes ") >= 0) {
+						if (temp.indexOf("<div class=\"mes") >= 0) {
+						//	System.out.println(temp);
 							stage = 2;
 						}
 						break;
 					case 2:
 						if (temp.indexOf("class=\"postmessage\">") >= 0) {// 找出
 																			// 文章內容
-							System.out.println(temp);
+					//		System.out.println(temp);
 							stage = 3;
 							// String[] temp2 =
 							// temp.split("class=\"postmessage\">");// 接取標題
