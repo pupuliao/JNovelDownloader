@@ -285,7 +285,7 @@ public class MakeBookThread extends Thread {
 								temp += lineSeparator+lineSeparator+lineSeparator;
 							}
 						}
-						if (otherTable == 0) {
+						if (true) {
 							// 去掉<strong>//|<[/]?strong>|<[/]?b>|<[/]?a[^>]*>)
 							m_html=pModStamp.matcher(temp);
 							temp = m_html.replaceAll("");
