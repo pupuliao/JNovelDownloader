@@ -36,9 +36,9 @@ public class Frame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField urlTextField;
-	private JTextField authorTextField;
-	private JTextField bookNameTextField;
+	private TextFiled urlTextField;
+	private TextFiled authorTextField;
+	private TextFiled bookNameTextField;
 	private JTextField pageTextField;
 	private JButton downloadButton;
 	private JLabel urlLabel;
@@ -77,7 +77,7 @@ public class Frame extends JFrame {
 		String os = System.getProperty("os.name").toLowerCase();
 //		if(os.indexOf("win") >= 0)
 //		{
-			bookNameTextField = new JTextField("", 20);
+			bookNameTextField = new TextFiled("", 20);
 //			
 //		}
 //		else
@@ -92,7 +92,7 @@ public class Frame extends JFrame {
 		authorLabel = new JLabel("作者");
 //		if(os.indexOf("win") >= 0)
 //		{
-			authorTextField = new JTextField("", 20);
+			authorTextField = new TextFiled("", 20);
 //		}
 //		else
 //		{
@@ -107,7 +107,7 @@ public class Frame extends JFrame {
 		urlPanel = new JPanel();
 		// 定義輸入框
 		urlPanel.add(urlLabel);
-		urlTextField = new JTextField("", 50); // 網址輸入視窗
+		urlTextField = new TextFiled("", 50); // 網址輸入視窗
 		urlPanel.add(urlTextField);
 		add(urlPanel);
 		pageLabel = new JLabel("下載到第幾頁?");
