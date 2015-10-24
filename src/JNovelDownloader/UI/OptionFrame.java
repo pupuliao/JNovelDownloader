@@ -126,9 +126,9 @@ public class OptionFrame extends JFrame {
 		add(threadNuimberPanel);
 		
 		if (option.replace) {
-			replaCheckBox = new JCheckBox("文字取代(尚未開放)", true);
+			replaCheckBox = new JCheckBox("違禁語、拼音復原(最新功能)", true);
 		} else {
-			replaCheckBox = new JCheckBox("文字取代(尚未開放)", false);
+			replaCheckBox = new JCheckBox("違禁語、拼音復原(最新功能)", false);
 		}
 
 		add(replaCheckBox);

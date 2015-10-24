@@ -250,6 +250,10 @@ public class Frame extends JFrame {
 			JOptionPane.showMessageDialog(null,
 					"本軟體最新版本為" + String.valueOf(theNewVersion) + "請至官網 下載最新版本",
 					"有更新版本喔!!", JOptionPane.WARNING_MESSAGE);
+		}else if(About.versionNumber == 4.2){
+			JOptionPane.showMessageDialog(null,
+					"新增錯別字、禁用語、拼音字復原功能~~請至[設定]中開啟他",
+					"有新功能喔!!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 

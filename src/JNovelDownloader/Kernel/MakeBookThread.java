@@ -16,16 +16,18 @@ public class MakeBookThread extends Thread {
 	private StringBuilder bookData;
 	private BufferedReader reader;
 	private boolean encoding;
+	private boolean replace;
 	private String result;
 	private int type;
 	private JTextArea resultTextArea;
 	private String lineSeparator;
 
-	public MakeBookThread(String[] data, boolean encoding, int type,
+	public MakeBookThread(String[] data, boolean encoding,boolean replace, int type,
 			JTextArea resultTextArea) {
 		html = data;
 		bookData = new StringBuilder();
 		this.encoding = encoding;
+		this.replace = replace;
 		this.type = type;
 		this.resultTextArea = resultTextArea;
 		this.lineSeparator=System.getProperty("line.separator");
@@ -154,10 +156,20 @@ public class MakeBookThread extends Thread {
 			}
 		}
 		Encoding encoding = new Encoding();
+		//	System.out.println(bookData.toString());
+		EditeReplacement editeReplacement = new EditeReplacement();
+		String tempData;
+		if(this.replace){
+			tempData = editeReplacement.replacePinyIn(bookData.toString());
+		}else{
+			tempData = bookData.toString();
+		}
 		if (this.encoding) {
-			result = encoding.StoT(bookData.toString());
+		//	result = encoding.StoT(bookData.toString());
+			result = encoding.StoT(tempData);
 		} else {
-			result = encoding.TtoS(bookData.toString());
+		//	result = encoding.TtoS(bookData.toString());
+			result = encoding.TtoS(tempData);
 		}
 	}
 
@@ -329,10 +341,19 @@ public class MakeBookThread extends Thread {
 		}
 		Encoding encoding = new Encoding();
 	//	System.out.println(bookData.toString());
+		EditeReplacement editeReplacement = new EditeReplacement();
+		String tempData ;
+		if(this.replace){
+			tempData = editeReplacement.replacePinyIn(bookData.toString());
+		}else{
+			tempData = bookData.toString();
+		}
 		if (this.encoding) {
-			result = encoding.StoT(bookData.toString());
+		//	result = encoding.StoT(bookData.toString());
+			result = encoding.StoT(tempData);
 		} else {
-			result = encoding.TtoS(bookData.toString());
+		//	result = encoding.TtoS(bookData.toString());
+			result = encoding.TtoS(tempData);
 		}
 	}
 
