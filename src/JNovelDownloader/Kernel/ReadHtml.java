@@ -138,7 +138,7 @@ public class ReadHtml {
 //		Encoding encoding=new Encoding();
 		MakeBookThread [] makeBookThreads =new MakeBookThread[option.threadNumber];
 		for (int n=0;n<option.threadNumber;n++){
-			makeBookThreads[n]=new MakeBookThread(fileName[n], option.encoding,type,resultTextArea);
+			makeBookThreads[n]=new MakeBookThread(fileName[n], option.encoding, option.replace,type,resultTextArea);
 			makeBookThreads[n].start();
 		}
 		try {//等全部跑完才繼續
