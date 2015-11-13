@@ -219,30 +219,35 @@ public class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!urlTextField.getText().equals("")) {
-					try {
-						Document doc = Jsoup.connect(urlTextField.getText())
-						.header("User-Agent",
-								"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19")
-						.get();
-						Elements title = doc.getElementsByTag("title");
-						String regex = "";
-						regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
-						Matcher matcher;
-						Pattern p;
-						p = Pattern.compile(regex);
-						matcher = p.matcher(title.get(0).text());
-						if (matcher.find()) {
-							bookNameTextField.setText(matcher.group(2));
-							authorTextField.setText(matcher.group(3));
-						} else {
-							resultTextArea.append("偵測失敗");
-							resultTextArea.setCaretPosition(resultTextArea.getText().length());	
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Document doc = Jsoup.connect(urlTextField.getText())
+								.header("User-Agent",
+										"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19")
+								.get();
+								Elements title = doc.getElementsByTag("title");
+								String regex = "";
+								regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
+								Matcher matcher;
+								Pattern p;
+								p = Pattern.compile(regex);
+								matcher = p.matcher(title.get(0).text());
+								if (matcher.find()) {
+									bookNameTextField.setText(matcher.group(2));
+									authorTextField.setText(matcher.group(3));
+								} else {
+									resultTextArea.append("偵測失敗");
+									resultTextArea.setCaretPosition(resultTextArea.getText().length());	
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								resultTextArea.append("偵測失敗");
+								resultTextArea.setCaretPosition(resultTextArea.getText().length());			
+							}
 						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						resultTextArea.append("偵測失敗");
-						resultTextArea.setCaretPosition(resultTextArea.getText().length());			
-					}
+					}).start();
 				} else {
 					resultTextArea.append("因網址空白導致偵測失敗");
 					resultTextArea.setCaretPosition(resultTextArea.getText().length());
