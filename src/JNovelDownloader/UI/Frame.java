@@ -1,25 +1,27 @@
 package JNovelDownloader.UI;
 
 import java.awt.FlowLayout;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.print.Book;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import com.sun.org.apache.xml.internal.dtm.Axis;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import JNovelDownloader.Kernel.Analysis;
 import JNovelDownloader.Kernel.DownloadThread;
@@ -41,6 +43,7 @@ public class Frame extends JFrame {
 	private TextFiled bookNameTextField;
 	private JTextField pageTextField;
 	private JButton downloadButton;
+	private JButton parseButton;
 	private JLabel urlLabel;
 	private JLabel authorLabel;
 	private JLabel bookNameLabel;
@@ -211,6 +214,42 @@ public class Frame extends JFrame {
 			}
 		});
 		downloadPanel.add(downloadButton);
+		parseButton = new JButton("偵測書名");
+		parseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!urlTextField.getText().equals("")) {
+					try {
+						Document doc = Jsoup.connect(urlTextField.getText())
+						.header("User-Agent",
+								"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19")
+						.get();
+						Elements title = doc.getElementsByTag("title");
+						String regex = "";
+						regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
+						Matcher matcher;
+						Pattern p;
+						p = Pattern.compile(regex);
+						matcher = p.matcher(title.get(0).text());
+						if (matcher.find()) {
+							bookNameTextField.setText(matcher.group(2));
+							authorTextField.setText(matcher.group(3));
+						} else {
+							resultTextArea.append("偵測失敗");
+							resultTextArea.setCaretPosition(resultTextArea.getText().length());	
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						resultTextArea.append("偵測失敗");
+						resultTextArea.setCaretPosition(resultTextArea.getText().length());			
+					}
+				} else {
+					resultTextArea.append("因網址空白導致偵測失敗");
+					resultTextArea.setCaretPosition(resultTextArea.getText().length());
+				}
+			}
+		});
+		downloadPanel.add(parseButton);
 		add(downloadPanel);
 
 		resultTextArea = new JTextArea(8, 50);// 訊息視窗
