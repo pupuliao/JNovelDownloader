@@ -234,16 +234,20 @@ public class Frame extends JFrame {
 								Pattern p;
 								p = Pattern.compile(regex);
 								matcher = p.matcher(title.get(0).text());
+								int page=getPage(option, urlTextField.getText());
 								if (matcher.find()) {
 									bookNameTextField.setText(matcher.group(2));
 									authorTextField.setText(matcher.group(3));
+									pageTextField.setText(String.valueOf(page));
+									resultTextArea.append("偵測完成，如有錯誤請手動修改。\r\n");
+									resultTextArea.setCaretPosition(resultTextArea.getText().length());	
 								} else {
-									resultTextArea.append("偵測失敗");
+									resultTextArea.append("偵測失敗\r\n");
 									resultTextArea.setCaretPosition(resultTextArea.getText().length());	
 								}
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
-								resultTextArea.append("偵測失敗");
+								resultTextArea.append("偵測失敗\r\n");
 								resultTextArea.setCaretPosition(resultTextArea.getText().length());			
 							}
 						}
