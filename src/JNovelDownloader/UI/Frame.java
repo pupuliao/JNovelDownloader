@@ -1,31 +1,28 @@
 package JNovelDownloader.UI;
 
 import java.awt.FlowLayout;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.print.Book;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import com.sun.org.apache.xml.internal.dtm.Axis;
 
 import JNovelDownloader.Kernel.Analysis;
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
-import JNovelDownloader.Kernel.Replace;
 import JNovelDownloader.Kernel.UrlData;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
@@ -41,6 +38,7 @@ public class Frame extends JFrame {
 	private TextFiled bookNameTextField;
 	private JTextField pageTextField;
 	private JButton downloadButton;
+	private JButton parseButton;
 	private JLabel urlLabel;
 	private JLabel authorLabel;
 	private JLabel bookNameLabel;
@@ -211,6 +209,47 @@ public class Frame extends JFrame {
 			}
 		});
 		downloadPanel.add(downloadButton);
+		parseButton = new JButton("偵測書名");
+		parseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!urlTextField.getText().equals("")) {
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								int page=getPage(option, urlTextField.getText());
+								String title = getTittle(option);
+								String regex = "";
+								regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
+								Matcher matcher;
+								Pattern p;
+								p = Pattern.compile(regex);
+								matcher = p.matcher(title);
+								if (matcher.find()) {
+									bookNameTextField.setText(matcher.group(2));
+									authorTextField.setText(matcher.group(3));
+									pageTextField.setText(String.valueOf(page));
+									resultTextArea.append("偵測完成，如有錯誤請手動修改。\r\n");
+									resultTextArea.setCaretPosition(resultTextArea.getText().length());	
+								} else {
+									resultTextArea.append("偵測失敗\r\n");
+									resultTextArea.setCaretPosition(resultTextArea.getText().length());	
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								resultTextArea.append("偵測失敗\r\n");
+								resultTextArea.setCaretPosition(resultTextArea.getText().length());			
+							}
+						}
+					}).start();
+				} else {
+					resultTextArea.append("因網址空白導致偵測失敗");
+					resultTextArea.setCaretPosition(resultTextArea.getText().length());
+				}
+			}
+		});
+		downloadPanel.add(parseButton);
 		add(downloadPanel);
 
 		resultTextArea = new JTextArea(8, 50);// 訊息視窗
@@ -267,7 +306,7 @@ public class Frame extends JFrame {
 			}
 			else {
 				int p=getPage(option, url);
-				if(page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
+				if(page.equals("0") || page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
 					pageTextField.setText(String.valueOf(p));
 				}
 				if(bookName.isEmpty()){
@@ -369,8 +408,8 @@ public class Frame extends JFrame {
 				result = temp2[0];
 //				result = Replace.replace(result, "【", "[");
 //				result = Replace.replace(result, "】", "]");
-				result = Replace.replace(result, ":", "");
-				result = Replace.replace(result, " ", "");
+//				result = Replace.replace(result, ":", "");
+//				result = Replace.replace(result, " ", "");
 				break;
 			}
 		}
