@@ -19,15 +19,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import JNovelDownloader.Kernel.Analysis;
 import JNovelDownloader.Kernel.DownloadThread;
 import JNovelDownloader.Kernel.Downloader;
 import JNovelDownloader.Kernel.ReadHtml;
-import JNovelDownloader.Kernel.Replace;
 import JNovelDownloader.Kernel.UrlData;
 import JNovelDownloader.Option.About;
 import JNovelDownloader.Option.Option;
@@ -223,18 +218,14 @@ public class Frame extends JFrame {
 						@Override
 						public void run() {
 							try {
-								Document doc = Jsoup.connect(urlTextField.getText())
-								.header("User-Agent",
-										"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19")
-								.get();
-								Elements title = doc.getElementsByTag("title");
+								int page=getPage(option, urlTextField.getText());
+								String title = getTittle(option);
 								String regex = "";
 								regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
 								Matcher matcher;
 								Pattern p;
 								p = Pattern.compile(regex);
-								matcher = p.matcher(title.get(0).text());
-								int page=getPage(option, urlTextField.getText());
+								matcher = p.matcher(title);
 								if (matcher.find()) {
 									bookNameTextField.setText(matcher.group(2));
 									authorTextField.setText(matcher.group(3));
@@ -315,7 +306,7 @@ public class Frame extends JFrame {
 			}
 			else {
 				int p=getPage(option, url);
-				if(page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
+				if(page.equals("0") || page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
 					pageTextField.setText(String.valueOf(p));
 				}
 				if(bookName.isEmpty()){
@@ -417,8 +408,8 @@ public class Frame extends JFrame {
 				result = temp2[0];
 //				result = Replace.replace(result, "【", "[");
 //				result = Replace.replace(result, "】", "]");
-				result = Replace.replace(result, ":", "");
-				result = Replace.replace(result, " ", "");
+//				result = Replace.replace(result, ":", "");
+//				result = Replace.replace(result, " ", "");
 				break;
 			}
 		}
