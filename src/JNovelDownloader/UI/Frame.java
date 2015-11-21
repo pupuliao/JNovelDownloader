@@ -209,6 +209,7 @@ public class Frame extends JFrame {
 			}
 		});
 		downloadPanel.add(downloadButton);
+		/*
 		parseButton = new JButton("偵測書名");
 		parseButton.addActionListener(new ActionListener() {
 			@Override
@@ -250,6 +251,7 @@ public class Frame extends JFrame {
 			}
 		});
 		downloadPanel.add(parseButton);
+		*/
 		add(downloadPanel);
 
 		resultTextArea = new JTextArea(8, 50);// 訊息視窗
@@ -284,12 +286,13 @@ public class Frame extends JFrame {
 		} else {
 			resultTextArea.append("目前最新版本：" + String.valueOf(theNewVersion)
 					+ "\r\n");
+			resultTextArea.append("書名、作者偵測功能已經強化，可以只輸入網址即可\r\n");
 		}
 		if (theNewVersion > About.versionNumber) {
 			JOptionPane.showMessageDialog(null,
 					"本軟體最新版本為" + String.valueOf(theNewVersion) + "請至官網 下載最新版本",
 					"有更新版本喔!!", JOptionPane.WARNING_MESSAGE);
-		}else if(About.versionNumber == 4.2){
+		}else if(option.replace !=true){
 			JOptionPane.showMessageDialog(null,
 					"新增錯別字、禁用語、拼音字復原功能~~請至[設定]中開啟他",
 					"有新功能喔!!", JOptionPane.WARNING_MESSAGE);
@@ -305,15 +308,35 @@ public class Frame extends JFrame {
 				return false;
 			}
 			else {
+				String tempBooknameString ="";
+				String tempAuthorString = "";
+				if(bookName.isEmpty() || author.isEmpty()){
+					String title = getTittle(option);
+					String regex = "";
+					regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
+					Matcher matcher;
+					Pattern p;
+					p = Pattern.compile(regex);
+					matcher = p.matcher(title);
+					tempBooknameString ="";
+					tempAuthorString = "";
+					if (matcher.find()) {
+						tempBooknameString = matcher.group(2);
+						tempAuthorString = matcher.group(3);
+					}
+				}
+				
+				
+				
 				int p=getPage(option, url);
 				if(page.equals("0") || page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
 					pageTextField.setText(String.valueOf(p));
 				}
 				if(bookName.isEmpty()){
-					bookNameTextField.setText(getTittle(option));
+					bookNameTextField.setText(tempBooknameString);
 				}
 				if(author.isEmpty()){
-					authorTextField.setText("預設作者");
+					authorTextField.setText(tempAuthorString);
 				}
 			}
 			
