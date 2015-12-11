@@ -308,8 +308,11 @@ public class Frame extends JFrame {
 				return false;
 			}
 			else {
+				resultTextArea.append("開始分析網址...\r\n");
+				resultTextArea.setCaretPosition(resultTextArea.getText().length());	
 				String tempBooknameString ="";
 				String tempAuthorString = "";
+				int pageNumber=getPage(option, url);
 				if(bookName.isEmpty() || author.isEmpty()){
 					String title = getTittle(option);
 					String regex = "";
@@ -326,11 +329,8 @@ public class Frame extends JFrame {
 					}
 				}
 				
-				
-				
-				int p=getPage(option, url);
 				if(page.equals("0") || page.isEmpty()|| !page.matches("[1-9][0-9]*"))	{
-					pageTextField.setText(String.valueOf(p));
+					pageTextField.setText(String.valueOf(pageNumber));
 				}
 				if(bookName.isEmpty()){
 					bookNameTextField.setText(tempBooknameString);
@@ -339,8 +339,6 @@ public class Frame extends JFrame {
 					authorTextField.setText(tempAuthorString);
 				}
 			}
-			
-		
 		}
 		return true;
 	}

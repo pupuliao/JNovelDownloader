@@ -10,6 +10,7 @@ public class Option {
 	public boolean encoding;// 1-繁體 0=簡體
 	public boolean replace;// 是否要做替換
 	public String novelPath;// 小說存放位置
+	public String outputEncode; // Unicode, UTF-8
 	private File file;
 	public int threadNumber;
 
@@ -38,6 +39,9 @@ public class Option {
 				threadNumber=Integer.parseInt(temp2[1]);
 			}
 			else threadNumber=4;
+			temp=reader.readLine();
+			temp2=temp.split("_");
+			outputEncode=temp2[1];
 			reader.close();
 			/**檢查檔案路徑是否存在***/
 			tempFile=new File(tempPath);
@@ -62,6 +66,7 @@ public class Option {
 		novelPath=temp.getAbsolutePath()+fileSeparator+"down"+fileSeparator;
 		encoding = true; //預設繁體
 		replace = false; //預設不處理
+		outputEncode = "Unicode"; //預設 Unicode
 		threadNumber=4;
 		temp=new File(tempPath);
 		temp.mkdir();
@@ -82,6 +87,7 @@ public class Option {
 		writer.write("encoding-"+String.valueOf(encoding)+lineSeparator);
 		writer.write("replace-"+String.valueOf(replace)+lineSeparator);
 		writer.write("threadNumber-"+String.valueOf(threadNumber)+lineSeparator);
+		writer.write("outputEncode_"+outputEncode+lineSeparator);
 		writer.flush();
 		writer.close();
 	}
@@ -95,6 +101,7 @@ public class Option {
 		writer.write("encoding-"+String.valueOf(encoding)+lineSeparator);
 		writer.write("replace-"+String.valueOf(replace)+lineSeparator);
 		writer.write("threadNumber-"+String.valueOf(threadNumber)+lineSeparator);
+		writer.write("outputEncode_"+outputEncode+lineSeparator);
 		writer.flush();
 		writer.close();
 		/**檢查檔案路徑是否存在***/
@@ -115,6 +122,7 @@ public class Option {
 		if(encoding) resultTextArea.append("正體中文"+lineSeparator);
 		else resultTextArea.append("簡體中文"+lineSeparator);
 		resultTextArea.append("多執行序數目："+threadNumber+lineSeparator);
+		resultTextArea.append("輸出編碼："+outputEncode+lineSeparator);
 		resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength());
 		
 	}
