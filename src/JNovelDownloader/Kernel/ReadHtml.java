@@ -126,7 +126,7 @@ public class ReadHtml {
 	
 	public boolean makeBook(Option option)throws IOException {
 		writer = new OutputStreamWriter(new FileOutputStream(option.novelPath
-				+ bookName + ".txt"), "UTF-8");
+				+ bookName + ".txt"), option.outputEncode);
 		writer.write(bookName + "\r\n" + author + "\r\n");
 		resultTextArea.append("\r\n開始分析網頁\r\n");
 		resultTextArea.setCaretPosition(resultTextArea.getText()

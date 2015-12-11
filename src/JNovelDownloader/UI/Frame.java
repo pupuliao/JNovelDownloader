@@ -308,6 +308,8 @@ public class Frame extends JFrame {
 				return false;
 			}
 			else {
+				resultTextArea.append("開始分析網址...\r\n");
+				resultTextArea.setCaretPosition(resultTextArea.getText().length());	
 				String tempBooknameString ="";
 				String tempAuthorString = "";
 				int pageNumber=getPage(option, url);

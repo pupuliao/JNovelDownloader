@@ -32,19 +32,25 @@ public class OptionFrame extends JFrame {
 	private JPanel novelPathPanel;
 	private JButton novalPathButton;
 	private JLabel encodingLabel;
+	private JLabel outPutEncodeLabel;
 	private JLabel threadNumberLabel;
 	private JPanel encodingPanel;
+	private JPanel outputEncodingPanel;
 	private JPanel tempPathPanel;
 	private JPanel threadNuimberPanel;
 	private JButton tempPathButton;
 	private ButtonGroup encoding;
+	private ButtonGroup outputEncoding;
 	private JRadioButton encodingTRadioButton;
 	private JRadioButton encodingSRadioButton;
+	private JRadioButton unicodeRadioButton;
+	private JRadioButton utf_8RadioButton;
 	private JCheckBox replaCheckBox;
 	// private JPanel checkPanel;
 	private JButton setButton;
 	// private JButton exitButton;
 	private boolean tempEncoding;
+	private String tempoutputEncoding;
 
 	public OptionFrame(final Option option, final JTextArea resulTextArea) {
 		super("設置");
@@ -118,6 +124,22 @@ public class OptionFrame extends JFrame {
 		encodingTRadioButton.addItemListener(new RadioButtonHandler(true));
 		encodingSRadioButton.addItemListener(new RadioButtonHandler(false));
 		add(encodingPanel);
+		
+		outPutEncodeLabel = new JLabel("輸出編碼選擇");
+		unicodeRadioButton = new JRadioButton("Unicode", option.outputEncode.equals("Unicode"));
+		utf_8RadioButton = new JRadioButton("UTF-8", !option.outputEncode.equals("Unicode"));
+		tempoutputEncoding=option.outputEncode;
+		outputEncoding = new ButtonGroup();
+		outputEncoding.add(unicodeRadioButton);
+		outputEncoding.add(utf_8RadioButton);
+		outputEncodingPanel = new JPanel();
+		outputEncodingPanel.add(outPutEncodeLabel);
+		outputEncodingPanel.add(unicodeRadioButton);
+		outputEncodingPanel.add(utf_8RadioButton);
+		unicodeRadioButton.addItemListener(new EnocdeButtonHandler(true));
+		utf_8RadioButton.addItemListener(new EnocdeButtonHandler(false));
+		add(outputEncodingPanel);
+		
 		threadNumberLabel =new JLabel("多執行序數目：");
 		threadNumberTextField  =new JTextField(String.valueOf(option.threadNumber), 5);
 		threadNuimberPanel =new JPanel();
@@ -143,6 +165,7 @@ public class OptionFrame extends JFrame {
 				option.encoding = tempEncoding;
 				option.replace = replaCheckBox.isSelected();
 				option.threadNumber=Integer.parseInt(threadNumberTextField.getText());
+				option.outputEncode = tempoutputEncoding;
 
 				try {
 					option.saveOption();
@@ -174,5 +197,20 @@ public class OptionFrame extends JFrame {
 			tempEncoding = encode;
 		}
 
+	}
+	
+	private class EnocdeButtonHandler implements ItemListener { // 當選擇 RADIO
+		// 按鈕時觸發
+		private String encode;
+		
+		public EnocdeButtonHandler(boolean a) {
+			if(a) encode="Unicode";
+			else encode="UTF-8";
+		}
+		
+		public void itemStateChanged(ItemEvent arg0) {
+		// TODO Auto-generated method stub
+			tempoutputEncoding = encode;
+		}
 	}
 }
