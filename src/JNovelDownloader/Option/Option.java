@@ -20,29 +20,35 @@ public class Option {
 		String temp;
 		String []temp2;
 		if (ifNoSetUp()) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(file), "UTF-8"));
-			temp=reader.readLine();
-			temp2=temp.split("-");
-			tempPath=temp2[1];
-			temp=reader.readLine();
-			temp2=temp.split("-");
-			novelPath=temp2[1];
-			temp=reader.readLine();
-			temp2=temp.split("-");
-			encoding=Boolean.valueOf(temp2[1]);
-			temp=reader.readLine();
-			temp2=temp.split("-");
-			replace=Boolean.valueOf(temp2[1]);
-			if((temp=reader.readLine())!=null){
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						new FileInputStream(file), "UTF-8"));
+				temp=reader.readLine();
 				temp2=temp.split("-");
-				threadNumber=Integer.parseInt(temp2[1]);
+				tempPath=temp2[1];
+				temp=reader.readLine();
+				temp2=temp.split("-");
+				novelPath=temp2[1];
+				temp=reader.readLine();
+				temp2=temp.split("-");
+				encoding=Boolean.valueOf(temp2[1]);
+				temp=reader.readLine();
+				temp2=temp.split("-");
+				replace=Boolean.valueOf(temp2[1]);
+				if((temp=reader.readLine())!=null){
+					temp2=temp.split("-");
+					threadNumber=Integer.parseInt(temp2[1]);
+				}
+				else threadNumber=4;
+				temp=reader.readLine();
+				temp2=temp.split("_");
+				outputEncode=temp2[1];
+				reader.close();				
+			} catch(Exception e) {
+				setUp();
+				creatOptionfile();
 			}
-			else threadNumber=4;
-			temp=reader.readLine();
-			temp2=temp.split("_");
-			outputEncode=temp2[1];
-			reader.close();
+
 			/**檢查檔案路徑是否存在***/
 			tempFile=new File(tempPath);
 			if(!tempFile.exists()){
