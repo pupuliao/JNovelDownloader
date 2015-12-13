@@ -72,7 +72,7 @@ public class Option {
 		novelPath=temp.getAbsolutePath()+fileSeparator+"down"+fileSeparator;
 		encoding = true; //預設繁體
 		replace = false; //預設不處理
-		outputEncode = "Unicode"; //預設 Unicode
+		outputEncode = "UTF-8"; //預設 Unicode
 		threadNumber=4;
 		temp=new File(tempPath);
 		temp.mkdir();
