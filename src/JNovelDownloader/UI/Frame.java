@@ -1,12 +1,19 @@
 package JNovelDownloader.UI;
 
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +45,7 @@ public class Frame extends JFrame {
 	private TextFiled bookNameTextField;
 	private JTextField pageTextField;
 	private JButton downloadButton;
-	private JButton parseButton;
+	//private JButton parseButton;
 	private JLabel urlLabel;
 	private JLabel authorLabel;
 	private JLabel bookNameLabel;
@@ -268,9 +275,64 @@ public class Frame extends JFrame {
 		resultTextArea.append("啟動中...\r\n");
 
 		option.printOption(resultTextArea);// 印出初始訊息
+		
+		DetectClipboardThread dClipboardThread = new DetectClipboardThread();
+		dClipboardThread.start();
 
 	}
+	
+	class DetectClipboardThread extends Thread implements Runnable {
+		
+		public void run() {
+			Timer timer = new Timer();
+			timer.schedule(new DateTask(), 1000, 2000); // check every 2 seconds
+		}
+	}
+	
+	class DateTask extends TimerTask {
+		
+		DetectClipboard dc = new DetectClipboard();
+		
+		@Override
+		public void run() {
+			if(dc.getClipboard().contains("ck101")) {
+				urlTextField.setText(dc.getClipboard());
+			}
+		}
+	}
+	
+	public class DetectClipboard implements ClipboardOwner {
+	    private Clipboard clipboard;
 
+	    public DetectClipboard() {
+	    	DetectClipboard_init();
+	    }
+
+	    public void DetectClipboard_init(){
+	        clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+	    }
+
+	    /**
+	     * get Clipboard
+	     * @return
+	     */
+	    public String getClipboard(){
+	        Transferable content = clipboard.getContents(this);
+	        try{
+	            return (String) content.getTransferData(DataFlavor.stringFlavor);
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //System.out.println(e);
+	        }
+	        return null;
+	    }
+	    
+	    public void lostOwnership(Clipboard clipboard, Transferable contents) {
+	        //System.out.println("lostOwnership...");
+	    }
+	}
+ 
+	
 	public void popVersionAlert(Option option) {
 		try {
 			theNewVersion = checkVersion(option);
