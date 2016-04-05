@@ -407,7 +407,7 @@ public class Frame extends JFrame {
 
 	private double checkVersion(Option option) throws Exception {
 		//String targetURL = "http://code.google.com/p/jnoveldownload/downloads/list";
-		String targetURL = "http://sourceforge.net/projects/jnoveldownload/files";
+		String targetURL = "https://sourceforge.net/projects/jnoveldownload/files";
 		String to = option.tempPath + "version.html";
 		double version = 0;
 		DownloadThread downloadThread = new DownloadThread(targetURL, to, 0);
