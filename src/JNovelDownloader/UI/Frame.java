@@ -9,6 +9,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -377,6 +378,7 @@ public class Frame extends JFrame {
 				int pageNumber=getPage(option, url);
 				if(bookName.isEmpty() || author.isEmpty()){
 					String title = getTittle(option);
+					System.out.print("["+title+"]");
 					String regex = "";
 					regex = "([\\[【「（《［].+[\\]】」）》］])?\\s*[【《\\[]?\\s*([\\S&&[^】》]]+).*作者[】:：︰ ]*([\\S&&[^(（《﹝【]]+)";
 					Matcher matcher;
@@ -388,6 +390,8 @@ public class Frame extends JFrame {
 					if (matcher.find()) {
 						tempBooknameString = matcher.group(2);
 						tempAuthorString = matcher.group(3);
+					}else{
+						tempBooknameString = title;
 					}
 				}
 				
@@ -456,8 +460,13 @@ public class Frame extends JFrame {
 		while ((temp = reader.readLine()) != null) {
 			if (temp.indexOf("class=\"pg\"") >= 0) {
 				if (temp.indexOf("class=\"last\"") >= 0) {
-					temp2 = temp.split("class=\"last\">.. ");
+					temp2 = temp.split("class=\"last\">");
 					temp2 = temp2[1].split("</a>");
+				//	System.out.print(temp2[0]);
+				//	System.out.print(temp2[0].replaceAll("\\.", ""));
+					temp2[0] = temp2[0].replaceAll("\\.", "");
+					temp2[0] = temp2[0].replaceAll(" ", "");
+				//	System.out.print(temp2[0]);
 					result = Integer.parseInt(temp2[0]);
 				}else if(temp.indexOf("class=\"nxt\"") >= 0){
 					temp2 = temp.split("class=\"nxt\"");
@@ -484,9 +493,17 @@ public class Frame extends JFrame {
 		String temp;
 		String temp2[];
 		String result = null;
+		int title = 0;
 		while ((temp = reader.readLine()) != null) {
 			if (temp.indexOf("<title>") >= 0) {
+				
+				System.out.println(temp);
 				temp2 = temp.split("title>");
+				while(temp2.length<2){
+					temp += reader.readLine();
+					System.out.println(temp);
+					temp2 = temp.split("title>");
+				}
 				temp2 = temp2[1].split(" - ");
 				result = temp2[0];
 //				result = Replace.replace(result, "【", "[");
