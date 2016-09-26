@@ -163,7 +163,7 @@ public class DownloadThread extends Thread {
 					resultTextArea.setCaretPosition(resultTextArea.getText()
 							.length());
 				}
-				if(downloadmiss>20)
+				if(downloadmiss<20)
 				{
 					downloadmiss++;
 					System.out.println("等待一秒嘗試重新下載....");
@@ -174,10 +174,8 @@ public class DownloadThread extends Thread {
 					}
 					n--;
 					try {
-						this.sleep(1000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
-						// TODO 自動產生的 catch 區塊
-						e1.printStackTrace();
 					}
 					continue;
 				}
@@ -202,7 +200,7 @@ public class DownloadThread extends Thread {
 				writer.close();
 				System.out.println("下載完成");
 				if (resultTextArea != null) {
-					resultTextArea.append("下載完成");
+					resultTextArea.setText(resultTextArea.getText().replaceAll(from[n]+"\r\n", from[n]+"下载完成\r\n"));
 					resultTextArea.setCaretPosition(resultTextArea.getText()
 							.length());
 				}
