@@ -514,7 +514,7 @@ public class Frame extends JFrame {
 			}
 		}
 		reader.close();
-		return result;
+		return result.trim();
 	}
 
 }
