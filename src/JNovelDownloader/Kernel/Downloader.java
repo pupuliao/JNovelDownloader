@@ -58,7 +58,7 @@ public class Downloader {
 				urlStrings[m++] = temp + n;
 			}
 		} else {
-			String temp = "http://" + urlData.domain + "/thread-"
+			String temp = "https://" + urlData.domain + "/thread-"
 					+ String.valueOf(urlData.Tid) + "-";
 			int m = 0;
 			for (int n = urlData.page; n <= toPage; n++) {
