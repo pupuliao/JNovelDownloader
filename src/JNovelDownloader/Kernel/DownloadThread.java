@@ -9,6 +9,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.security.cert.CertificateException;
+import javax.security.cert.X509Certificate;
 import javax.swing.JTextArea;
 
 public class DownloadThread extends Thread {
@@ -106,8 +114,10 @@ public class DownloadThread extends Thread {
 							.length());
 				}
 				URL url = new URL(from[n]);
+				System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
+				
 //				if (from[n].indexOf("eyny") >= 0) {
 
 				connection.setDoOutput(true);//
@@ -273,5 +283,7 @@ public class DownloadThread extends Thread {
 	// }
 	//
 	// }
-
+	
+	
+	
 }
