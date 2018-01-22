@@ -22,7 +22,7 @@ public class main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,350);
 		frame.setVisible(true);
-		frame.popVersionAlert(option); //版本檢查掛了
+		//frame.popVersionAlert(option); //版本檢查掛了
 		if(!option.checkPath()){
 			frame.popPathAlert();
 		}

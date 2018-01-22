@@ -113,8 +113,32 @@ public class DownloadThread extends Thread {
 					resultTextArea.setCaretPosition(resultTextArea.getText()
 							.length());
 				}
+				TrustManager[] trustAllCerts = new TrustManager[]{
+				    new X509TrustManager() {
+				        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				            return null;
+				        }
+				        public void checkClientTrusted(
+				            java.security.cert.X509Certificate[] certs, String authType) {
+				        }
+				        public void checkServerTrusted(
+				            java.security.cert.X509Certificate[] certs, String authType) {
+				        }
+				    }
+				};
+
+					// Activate the new trust manager
+				try {
+				    SSLContext sc = SSLContext.getInstance("SSL");
+				    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+				    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+				} catch (Exception e) {
+					
+				}
+				
+				
 				URL url = new URL(from[n]);
-				System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+				System.setProperty("https.protocols", "TLSv1.2");
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
 				
@@ -126,19 +150,19 @@ public class DownloadThread extends Thread {
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (Linux; U; Android 4.0.3; zh-tw; HTC_Sensation_Z710e Build/IML74K)AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
+									"Mozilla/5.0 (Linux; U; Android 6.0.1; zh-CN; SM-C7000 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/40.0.2214.89 UCBrowser/11.6.2.948 Mobile Safari/537.36");
 					break;
 				case 1:
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; SAMSUNG; OMNIA7)　");
+									"Mozilla/5.0 (Linux; Android 4.1.1; M040 Build/JRO03H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.59 Mobile Safari/537.36");
 					break;
 				case 2:
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A5313e Safari/7534.48.3");
+									"Mozilla/5.0 (Linux; Android 4.2.1; M040 Build/JOP40D) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.59 Mobile Safari/537.36");
 					break;
 				case 3:
 					connection
@@ -150,7 +174,7 @@ public class DownloadThread extends Thread {
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19");
+									"Mozilla/5.0 (iPhone; CPU iPhone OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12F70 Safari/600.1.4");
 					break;
 				}
 
