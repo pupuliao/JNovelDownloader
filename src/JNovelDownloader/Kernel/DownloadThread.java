@@ -179,6 +179,8 @@ public class DownloadThread extends Thread {
 				}
 
 				connection.connect();
+				// edit by markwu123 新增 "Accept-Language", "en-US,en;q=0.5" 2018/1/22
+				connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 				InputStream inStream = (InputStream) connection
 						.getInputStream();
 				BufferedReader reader = new BufferedReader(
