@@ -205,8 +205,8 @@ public class MakeBookThread extends Thread {
 				while ((temp = reader.readLine()) != null) { // 一次讀取一行
 					switch (stage) {
 					case 0:
-						if (temp.indexOf("class=\"pbody") >= 0) {
-							stage = 1;
+						if (temp.indexOf("id=\"postmessage") >= 0) {
+							stage = 3;//直接進入主題
 						}
 						break;
 					case 1:
@@ -215,20 +215,7 @@ public class MakeBookThread extends Thread {
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
 							
-							// if (flag == false
-							// &&
-							// temp.matches("第[一二三四五六七八九十百零1234567890 　]*章 [^<>]*"))
-							// // for
-							// // Calibre
-							// // 轉檔
-							// {
-							// String headLineString = "<floor>"
-							// + Replace.replace(temp, "\r\n", "")
-							// + "</floor>";
-							// bookData.append(headLineString);
-							// bookData.append("\r\n");
-							// flag = true;
-							// }
+							
 							bookData.append(temp);
 							bookData.append(lineSeparator);
 						}
