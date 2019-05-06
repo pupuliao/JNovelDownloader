@@ -6,7 +6,7 @@ public class About {
 	public static String author="pupuliao";
 	public static String emailString="pupuliao@gmail.com";
 	public static String urlString="http://www.pupuliao.info";
-	public static double versionNumber=5.0;
+	public static double versionNumber=5.1;
 	public About(){
 		
 	}

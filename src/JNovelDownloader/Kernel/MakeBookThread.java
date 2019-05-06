@@ -207,6 +207,30 @@ public class MakeBookThread extends Thread {
 					case 0:
 						if (temp.indexOf("id=\"postmessage") >= 0) {
 							stage = 3;//直接進入主題
+							
+							if (temp.indexOf("<i class=\"pstatus\">") >= 0) { // 過慮修改時間
+								temp = temp.replaceAll(
+										"<i class=\"pstatus\">[^<>]+ </i>", "");
+							}
+							if (temp.indexOf("<div class=\"quote\">") >= 0) { // 過濾
+																				// 引用
+								otherTable++;
+								temp = temp
+										.replaceAll(
+												"<font color=\"#999999\">[^<>]+</font>",
+												"");
+							}
+							m_html=pModStamp.matcher(temp);
+							temp = m_html.replaceAll("");
+							temp += lineSeparator;
+							temp = Replace.replace(temp, "<br/>", lineSeparator);
+							temp = Replace.replace(temp, "<br />", lineSeparator);
+							temp = Replace.replace(temp, "&nbsp;", "");
+							m_html = p_html.matcher(temp);
+							temp = m_html.replaceAll("");
+							temp = temp.replaceAll("^[ \t　]+", ""); // 過濾凸排
+							
+							bookData.append(temp);
 						}
 						break;
 					case 1:
@@ -254,18 +278,7 @@ public class MakeBookThread extends Thread {
 							m_html = p_html.matcher(temp);
 							temp = m_html.replaceAll("");
 							temp = temp.replaceAll("^[ \t　]+", ""); // 過濾凸排
-							// if(flag==false &&
-							// temp.matches("第[一二三四五六七八九十百零1234567890 　]*章 [^<>]*"))
-							// //for Calibre 轉檔
-							// {
-							//
-							// String
-							// headLineString="<floor>"+Replace.replace(temp,
-							// "\r\n", "")+"</floor>";
-							// bookData.append(headLineString);
-							// bookData.append("\r\n");
-							// flag=true;
-							// }
+							
 							bookData.append(temp);
 							// 如果有
 							// 會有內容，如果沒有是空字串
