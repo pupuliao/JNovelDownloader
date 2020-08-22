@@ -131,7 +131,7 @@ public class DownloadThread extends Thread {
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; SAMSUNG; OMNIA7)　");
+									"Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148");
 					break;
 				case 2:
 					connection
@@ -143,7 +143,7 @@ public class DownloadThread extends Thread {
 					connection
 							.setRequestProperty(
 									"User-Agent",
-									"Mozilla/5.0 (Linux; Android 4.2.2; Nexus 7 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166  Safari/535.19");
+									"Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1");
 					break;
 				default:
 					connection
@@ -153,7 +153,12 @@ public class DownloadThread extends Thread {
 					break;
 				}
 				// edit by markwu123 新增 "Accept-Language", "en-US,en;q=0.5" 2018/1/22
-				connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+				connection.setRequestProperty("Accept-Language", "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7");
+				connection.setDoInput(true);
+				   // 設定是否向httpUrlConnection輸出
+				connection.setDoOutput(true);
+				   // Post 請求不能使用快取
+				connection.setUseCaches(false);
 				connection.connect();
 				
 				InputStream inStream = (InputStream) connection

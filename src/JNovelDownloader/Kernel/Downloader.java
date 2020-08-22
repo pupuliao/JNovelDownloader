@@ -47,10 +47,13 @@ public class Downloader {
 		resultTextArea.setCaretPosition(resultTextArea
 				.getText().length());
 		// http://ck101.com/thread-1753100-55-1.html
+		if(urlData.domain.indexOf("ck101") >= 0) {
+			this.toPage = (int)Math.ceil((this.toPage * 20 / 15))+1;
+		}
 		urlStrings = new String[toPage - urlData.page + 1];
 		if (urlData.domain.indexOf("eyny") >= 0) {
 			//http://www02.eyny.com/archiver/?tid-8910527.html&mobile=yes
-			String temp = "http://" + urlData.domain
+			String temp = "https://" + urlData.domain
 					+ "/archiver/?tid-"
 					+ String.valueOf(urlData.Tid) + "&mobile=yes&page=";
 			int m = 0;
@@ -58,6 +61,8 @@ public class Downloader {
 				urlStrings[m++] = temp + n;
 			}
 		} else {
+			//因為卡提括手機板電腦版每一頁文章數不同 頁數需要額哦外增加
+			
 			String temp = "https://" + urlData.domain + "/thread-"
 					+ String.valueOf(urlData.Tid) + "-";
 			int m = 0;
